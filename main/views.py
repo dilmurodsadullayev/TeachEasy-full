@@ -28,3 +28,6 @@ def single_view(request):
 
 def blogs_view(request):
     return render(request, 'main/blog.html')
+
+def course_students_view(request):
+    return render(request, 'main/course_students.html')

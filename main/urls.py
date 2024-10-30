@@ -8,7 +8,8 @@ from .views import (
     teachers_view,
     gallery_view,
     single_view,
-    blogs_view
+    blogs_view,
+    course_students_view
 )
 
 urlpatterns = [
@@ -20,5 +21,6 @@ urlpatterns = [
     path('gallery',gallery_view,name='gallery'),
     path('single',single_view,name='single'),
     path('blogs',blogs_view,name='blogs'),
+    path('course-students',course_students_view,name='course_students'),
 
 ]

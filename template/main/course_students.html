@@ -1,0 +1,41 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% block title %} Course student {% endblock title %}
+
+{% block content %}
+<div class="text-center mt-5">
+    <h1>Course's students</h1>
+</div>
+<div class="container">
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Full Name</th>
+            <th scope="col">Started Date</th>
+            <th scope="col">Details</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td><a href="#">more</a></td>
+        </tr>
+        <tr>
+            <th scope="row">2</th>
+            <td>Jacob</td>
+            <td>Thornton</td>
+            <td><a href="#">more</a></td>
+        </tr>
+        <tr>
+            <th scope="row">3</th>
+            <td>Larry the Bird</td>
+            <td>muroba</td>
+            <td><a href="#">more</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock content %}
