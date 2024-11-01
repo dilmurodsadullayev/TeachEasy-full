@@ -31,3 +31,10 @@ def blogs_view(request):
 
 def course_students_view(request):
     return render(request, 'main/course_students.html')
+
+
+def signup_view(request):
+    return render(request, 'registration/sign_up.html')
+
+def sign_in_view(request):
+    return render(request, 'registration/sign_in.html')
