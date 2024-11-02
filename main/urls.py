@@ -10,9 +10,11 @@ from .views import (
     single_view,
     blogs_view,
     course_students_view,
-    #registrations
+    # registrations
     signup_view,
-    sign_in_view
+    sign_in_view,
+#students
+    student_detail_view
 )
 
 urlpatterns = [
@@ -28,5 +30,7 @@ urlpatterns = [
     # registration
     path('signup',signup_view,name='signup'),
     path('signin',sign_in_view,name='signin'),
+    #students
+    path('student-detail',student_detail_view,name='student_detail'),
 
 ]

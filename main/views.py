@@ -38,3 +38,6 @@ def signup_view(request):
 
 def sign_in_view(request):
     return render(request, 'registration/sign_in.html')
+
+def student_detail_view(request):
+    return render(request, 'main/student_detail.html')
