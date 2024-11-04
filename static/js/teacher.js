@@ -9,9 +9,6 @@ let infoOfTeacher = {
 
 
 function create() {
-  console.log();
-  console.log(infoOfTeacher.imgUrl);
-  console.log(infoOfTeacher.nameofJob);
   let div = document.createElement('div')
   div.classList.add('col-md-6')
   div.classList.add('col-lg-3')
