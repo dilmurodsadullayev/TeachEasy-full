@@ -41,3 +41,15 @@ def sign_in_view(request):
 
 def student_detail_view(request):
     return render(request, 'main/student_detail.html')
+
+
+def group_tasks_view(request):
+    return render(request, 'main/group_tasks.html')
+
+# attendance
+def attendances_view(request):
+    return render(request, 'main/attendances.html')
+
+
+def attendance_take_view(request):
+    return render(request, 'main/attendance_take.html')
