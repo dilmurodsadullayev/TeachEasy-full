@@ -2,4 +2,56 @@
 {% load static %}
 {% block title %} attendances {% endblock title %}
 {% block content %}
+
+<div class="container mt-5">
+
+  <div class="d-flex justify-content-center">
+
+    <h2>Attendances</h2>
+
+  </div>
+
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Full Name</th>
+        <th scope="col"><a href="{% url 'attendance_update' %}">2024-08-11</a></th>
+        <th scope="col"><a href="{% url 'attendance_update' %}">2024-08-12</a></th>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      <tr>
+        <th scope="row">1</th>
+        <td>Oktam</td>
+        <td><button class="btn btn-danger">no</button></td>
+        <td><button class="btn btn-success">yes</button></td>
+      </tr>
+      <tr>
+        <th scope="row">2</th>
+        <td>Jacob</td>
+        <td><button class="btn btn-success">yes</button></td>
+        <td><button class="btn btn-danger">no</button></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="d-flex justify-content-center mt-5">
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+        <li class="page-item"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="d-flex justify-content-start mt-3">
+    <button type="button" class="btn btn-outline-success mr-1">save</button>
+  </div>
+
+</div>
+
 {% endblock content %}

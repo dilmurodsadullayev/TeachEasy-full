@@ -53,3 +53,6 @@ def attendances_view(request):
 
 def attendance_take_view(request):
     return render(request, 'main/attendance_take.html')
+
+def attendance_update_view(request):
+    return render(request, 'main/attendence_update.html')
