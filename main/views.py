@@ -48,11 +48,11 @@ def group_tasks_view(request):
 
 # attendance
 def attendances_view(request):
-    return render(request, 'main/attendances.html')
+    return render(request, 'attendances/attendances.html')
 
 
 def attendance_take_view(request):
-    return render(request, 'main/attendance_take.html')
+    return render(request, 'attendances/attendance_take.html')
 
 def attendance_update_view(request):
-    return render(request, 'main/attendence_update.html')
+    return render(request, 'attendances/attendance_update.html')
