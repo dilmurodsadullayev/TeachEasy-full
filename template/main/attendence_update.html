@@ -3,6 +3,55 @@
 {% block title %} attendance update {% endblock title %}
 {% block content %}
 
-for update
+<div class="container mt-5">
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">First</th>
+        <th scope="col">Attendances</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">1</th>
+        <td>Mark</td>
+        <td><input type="text" class="update-input btn btn-danger" style="width: 50px;" value="no"></td>
+      </tr>
+      <tr>
+        <th scope="row">2</th>
+        <td>Jacob</td>
+        <td><input type="text" class="update-input btn btn-success" style="width: 50px;" value="yes"></td>
+      </tr>
+      <tr>
+        <th scope="row">3</th>
+        <td>Larry the Bird</td>
+        <td><button class="btn btn-success">yes</button></td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+
+<script>
+  let updateInput = document.querySelectorAll('.update-input')
+
+  console.log(updateInput);
+
+  updateInput.forEach(el => {
+    console.log(el);
+    el.addEventListener('input', () => {
+      if (el.value == 'yes') {
+        el.classList.add('btn-success')
+        el.classList.remove('btn-danger')
+      } else if (el.value == 'no') {
+        el.classList.remove('btn-success')
+        el.classList.add('btn-danger')
+      }
+    })
+  });
+</script>
 
 {% endblock content %}
