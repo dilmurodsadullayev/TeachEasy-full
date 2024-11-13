@@ -72,5 +72,9 @@ def teacher_detail_view(request):
 
 def teacher_edit_view(request):
     return render(request,'main/teacher_edit.html')
+
+
+def profile_view(request):
+    return render(request, 'main/profile.html')
     
 
