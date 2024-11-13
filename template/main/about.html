@@ -37,17 +37,15 @@
                 <div class="card-header d-flex justify-content-between">
                     <div class="img-circle-conatiner">
                         <div class="img-circle">
-                            <img src="{% static '/img/team-2.jpg' %}" alt="img teacher">
+                            <img src="{{ user_roles.0.image.url }}" alt="img teacher">
                         </div>
-                        <span class="p-2 h3">Jhon Marty</span>
+                        <span class="p-2 h3">{{ user_roles.0.name }}</span>
                     </div>
                     <span class="text-info">12 Dec, 2024</span>
                 </div>
                 <div class="card-body">
                     <blockquote class="blockquote mb-0 text-justify">
-                        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Recusandae perspiciatis optio
-                            beatae nisi sed maiores officiis? Ipsa ea quidem, tempore nostrum corrupti officiis quae
-                            laborum, dolore perferendis sapiente, fuga blanditiis.</p>
+                        <p>{{ user_roles.0.description }}.</p>
                     </blockquote>
                 </div>
                 <div class="card-footer">

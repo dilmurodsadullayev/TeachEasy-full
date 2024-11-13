@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from .models import UserRoles
 
 # Create your views here.
 def index_view(request):
@@ -7,7 +8,12 @@ def index_view(request):
 
 
 def about_view(request):
-    return render(request, 'main/about.html')
+    user_roles = UserRoles.objects.all()
+
+    ctx = {
+        'user_roles': user_roles
+    }
+    return render(request, 'main/about.html',ctx)
 
 
 def contact_view(request):
@@ -57,7 +63,6 @@ def attendance_take_view(request):
 def attendance_update_view(request):
     return render(request, 'attendances/attendance_update.html')
 
-
 def create_group_task_view(request):
     return render(request,'main/create_group_task.html')
 
@@ -68,3 +73,6 @@ def teacher_detail_view(request):
 def teacher_edit_view(request):
     return render(request,'main/teacher_edit.html')
     
+#Teacher
+def teacher_update_view(request):
+    return render(request, 'main/teacher_update.html')
