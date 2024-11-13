@@ -23,7 +23,7 @@ from .views import (
 #teachers
     teacher_detail_view,
     teacher_edit_view,
-    teacher_update_view
+
 )
 
 urlpatterns = [
@@ -50,6 +50,5 @@ urlpatterns = [
     #teacher
     path('teacher-detail',teacher_detail_view,name="teacher_detail"),
     path('teacher-edit',teacher_edit_view,name='teacher_edit'),
-    path('teacher-update',teacher_update_view,name='teacher_update'),
 
 ]

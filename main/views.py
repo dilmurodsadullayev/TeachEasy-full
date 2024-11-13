@@ -66,13 +66,11 @@ def attendance_update_view(request):
 def create_group_task_view(request):
     return render(request,'main/create_group_task.html')
 
-
+#Teacher
 def teacher_detail_view(request):
     return render(request,'main/teacher_detail.html')
 
 def teacher_edit_view(request):
     return render(request,'main/teacher_edit.html')
     
-#Teacher
-def teacher_update_view(request):
-    return render(request, 'main/teacher_update.html')
+
