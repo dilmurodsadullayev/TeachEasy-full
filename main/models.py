@@ -10,7 +10,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 #     def __str__(self):
 #         return self.name
 
-class UserRole(models.Model):
+class UserRoles(models.Model):
     name = models.CharField(max_length=20)
     image = models.ImageField(upload_to='role_images/')
     description = models.CharField(max_length=200)
