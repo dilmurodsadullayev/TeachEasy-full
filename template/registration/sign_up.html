@@ -40,9 +40,9 @@ background: linear-gradient(0deg, rgba(255,255,255,1) 2%, rgba(0,212,255,1) 100%
                 <button class="sign mt-3">Sign up</button>
             </form>
             <p class="signup mt-3">Already have an account ?
-                <a rel="noopener noreferrer" href="#" class="">Login</a>
+                <a rel="noopener noreferrer" href="{% url 'signin' %}" class="">Login</a>
             </p>
-            <a href="#" class="text-info text-decoration-none"><i class="bi bi-arrow-left"
+            <a href="{% url 'index' %}" class="text-info text-decoration-none"><i class="bi bi-arrow-left"
                     style="padding-right: 7px;"></i>Main page</a>
         </div>
 
