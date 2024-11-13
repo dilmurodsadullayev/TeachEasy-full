@@ -1,0 +1,46 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% block title %} create group task {% endblock title %}
+{% block content %}
+
+<div class="container mt-4">
+
+
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb bg-white">
+      <li class="breadcrumb-item"><a href="#" class="text-decoration-none">Courses</a></li>
+      <li class="breadcrumb-item"><a href="#" class="text-decoration-none">Group tasks</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Tasks create</li>
+    </ol>
+  </nav>
+  <div class="d-flex justify-content-center mb-3">
+    <h1>Task create</h1>
+  </div>
+
+
+  <form method="post">
+
+    <div class="mb-3">
+      <label class="form-label">Task name</label>
+      <input type="text" class="form-control">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Description</label>
+      <textarea class="form-control" rows="3"></textarea>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Start date</label>
+      <input type="date" class="form-control">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">End date</label>
+      <input type="date" class="form-control">
+    </div>
+
+
+    <input type="submit" value="create" class="btn btn-outline-success">
+  </form>
+
+
+</div>
+{% endblock content %}

@@ -2,5 +2,53 @@
 {% load static %}
 {% block title %} attendance take {% endblock title %}
 {% block content %}
-for attendances take
+
+<div class="container mt-5">
+
+
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb bg-white">
+      <li class="breadcrumb-item"><a href="#" class="text-decoration-none">Courses</a></li>
+      <li class="breadcrumb-item"><a href="#" class="text-decoration-none">Attendances</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Create attendance</li>
+    </ol>
+  </nav>
+  <div class="d-flex justify-content-center mb-3">
+    <h1>Create attendance</h1>
+  </div>
+
+  <form action="" method="post">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">First</th>
+          <th scope="col">2024-08-11</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">1</th>
+          <td>Mark</td>
+          <td><input type="checkbox" class="ml-4 form-check-input"></td>
+        </tr>
+        <tr>
+          <th scope="row">2</th>
+          <td>Jacob</td>
+          <td><input type="checkbox" class="ml-4 form-check-input"></td>
+        </tr>
+        <tr>
+          <th scope="row">3</th>
+          <td>Larry the Bird</td>
+          <td><input type="checkbox" class="ml-4 form-check-input"></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <input type="submit" class="btn btn-outline-success" value="save">
+
+  </form>
+</div>
+
+
 {% endblock content %}

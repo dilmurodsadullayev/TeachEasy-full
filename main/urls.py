@@ -18,7 +18,11 @@ from .views import (
     group_tasks_view,
     attendances_view,
     attendance_take_view,
-    attendance_update_view
+    attendance_update_view,
+    create_group_task_view,
+#teachers
+    teacher_detail_view,
+    teacher_edit_view
 )
 
 urlpatterns = [
@@ -40,6 +44,10 @@ urlpatterns = [
     #attendance
     path('attendances',attendances_view,name='attendances'),
     path('attendance-take',attendance_take_view,name='attendance_take'),
-    path('attendance-update',attendance_update_view,name='attendance_update')
+    path('attendance-update',attendance_update_view,name='attendance_update'),
+    path('create-group-task',create_group_task_view,name="create_group_task"),
+    #teacher
+    path('teacher-detail',teacher_detail_view,name="teacher_detail"),
+    path('teacher-edit',teacher_edit_view,name='teacher_edit')
 
 ]
