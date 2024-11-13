@@ -1,0 +1,141 @@
+[33mcommit 90b6e21f13ccf77676d342f92ad413f2db5be27b[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: Dilmurod <142794823+d1ilmurod@users.noreply.github.com>
+Date:   Sat Nov 9 22:23:29 2024 +0500
+
+    kamchiliklar to'g'irlandi
+
+[33mcommit 3b7ff1b41896b19b0ea4a3af4a73836934d52192[m
+Author: Ati <adhamxudayberganov942@gmail.com>
+Date:   Sat Nov 9 15:59:42 2024 +0500
+
+    new page
+
+[33mcommit 4600743f0ac6fc9e338f1b8bc53383915950b09a[m
+Merge: db34c7d 34ccc5f
+Author: Ati <adhamxudayberganov942@gmail.com>
+Date:   Wed Nov 6 15:49:29 2024 +0500
+
+    somwthing new 2
+
+[33mcommit db34c7de3e91a24ea4202fa8648473f8094e3254[m
+Author: Ati <adhamxudayberganov942@gmail.com>
+Date:   Wed Nov 6 15:48:21 2024 +0500
+
+    something new
+
+[33mcommit 34ccc5f38518d0c1c84ee1cd502362a812e666f5[m
+Merge: d331909 e8a356a
+Author: Dilmurod <142794823+d1ilmurod@users.noreply.github.com>
+Date:   Wed Nov 6 15:22:46 2024 +0500
+
+    Merge remote-tracking branch 'origin/master'
+
+[33mcommit d331909a30386036bb33e05ec1c12cfa3637b326[m
+Author: Dilmurod <142794823+d1ilmurod@users.noreply.github.com>
+Date:   Wed Nov 6 15:22:00 2024 +0500
+
+    new page add
+
+[33mcommit e8a356a1f737267bedc61ccfec4a7fd75fe7c18f[m
+Author: Ati <adhamxudayberganov942@gmail.com>
+Date:   Tue Nov 5 22:34:18 2024 +0500
+
+    delete, edit parts was added
+
+[33mcommit a27b354523edf08a7a40f39cf89ee6330fe055a1[m
+Author: Ati <adhamxudayberganov942@gmail.com>
+Date:   Tue Nov 5 11:18:49 2024 +0500
+
+    student detial done
+
+[33mcommit e0472da9e0b7125bbe6163096f8f317694c84574[m
+Merge: 2201468 f019adc
+Author: Ati <adhamxudayberganov942@gmail.com>
+Date:   Mon Nov 4 19:31:54 2024 +0500
+
+    Merge branch 'master' of https://github.com/dilmurodsadullayev/TeachEasy-full
+
+[33mcommit 2201468764d9cc48100ae17b701afc9dd8c16806[m
+Author: Ati <adhamxudayberganov942@gmail.com>
+Date:   Mon Nov 4 19:31:32 2024 +0500
+
+    nothing's new
+
+[33mcommit f019adc10daa8e59d3ca33816b01918e2ea5a1a6[m
+Author: Dilmurod <142794823+d1ilmurod@users.noreply.github.com>
+Date:   Sat Nov 2 22:47:28 2024 +0500
+
+    fix url student course
+
+[33mcommit 2203fce75f07533e850a17b86b4fb8760c071ee6[m
+Author: Dilmurod <142794823+d1ilmurod@users.noreply.github.com>
+Date:   Sat Nov 2 21:33:26 2024 +0500
+
+    fix
+
+[33mcommit 48b1f6ca52c939b1824764af86a8dccf4611e6bb[m
+Merge: bc30d0e 5a3fb77
+Author: Ati <adhamxudayberganov942@gmail.com>
+Date:   Sat Nov 2 21:24:17 2024 +0500
+
+    Merge branch 'master' of https://github.com/dilmurodsadullayev/TeachEasy-full
+
+[33mcommit bc30d0ec015cdfa1c47b3541e9f984f8de8ba0f7[m
+Author: Ati <adhamxudayberganov942@gmail.com>
+Date:   Sat Nov 2 21:23:59 2024 +0500
+
+    teacher creating, sign up and login in update
+
+[33mcommit 5a3fb77773bae3772e8750e7998276363f1724c5[m
+Author: Dilmurod <142794823+d1ilmurod@users.noreply.github.com>
+Date:   Sat Nov 2 21:21:37 2024 +0500
+
+    student detail sahifa yaratildi va view va url yozildi
+
+[33mcommit 00f16ab24d5bd3b7a6a22735cc51362cd24ae946[m
+Author: Dilmurod <142794823+d1ilmurod@users.noreply.github.com>
+Date:   Sat Nov 2 19:16:54 2024 +0500
+
+    requitements faylga bir ikkita packeg qo'shildi
+
+[33mcommit 306b7338563cb3a9e5af239db9d496a86d0d925f[m
+Author: Dilmurod <142794823+d1ilmurod@users.noreply.github.com>
+Date:   Sat Nov 2 16:11:17 2024 +0500
+
+    add main.css
+
+[33mcommit 4cbc10917266250ae167a0dc1ccad32a42ec0b77[m
+Author: Dilmurod <142794823+d1ilmurod@users.noreply.github.com>
+Date:   Sat Nov 2 16:10:41 2024 +0500
+
+    sign in yozildi
+
+[33mcommit 67f86851770ee69ec2f90a4fc7a83e90cf633c09[m
+Author: Dilmurod <142794823+d1ilmurod@users.noreply.github.com>
+Date:   Fri Nov 1 18:08:55 2024 +0500
+
+    registration degan papka ochildi va shuni ichiga sign_in va sign_up degan fayllar yaratildi va view va url yozildi
+
+[33mcommit 9e33659dad2963c61d5f94ae7d90797d3162be35[m
+Author: Dilmurod <142794823+d1ilmurod@users.noreply.github.com>
+Date:   Wed Oct 30 21:42:00 2024 +0500
+
+    models fayli yozib bo'lindi lekin makemigrations berilmadi
+
+[33mcommit 39a61a27086ba2326b29bcbc869a8d646e59dca9[m
+Author: Dilmurod <142794823+d1ilmurod@users.noreply.github.com>
+Date:   Wed Oct 30 17:05:16 2024 +0500
+
+    courses fayliga o'zgartirish lar kiritildi yani yangi sahifalar qo'shildi uni ichiga
+
+[33mcommit 33b70416f3ef8f4f944ac8186de44f84fa8dbcb3[m[33m ([m[1;31morigin/front[m[33m)[m
+Author: Dilmurod <142794823+d1ilmurod@users.noreply.github.com>
+Date:   Wed Oct 30 10:44:53 2024 +0500
+
+    barcha sahifalarga static fayldagi rasimlar ga url berilib chiqildi
+
+[33mcommit 671d840c04091e9b3f3b3835ef48e393ac701aa6[m
+Author: Dilmurod <142794823+d1ilmurod@users.noreply.github.com>
+Date:   Wed Oct 30 10:10:54 2024 +0500
+
+    first commit
