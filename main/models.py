@@ -10,7 +10,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 #     def __str__(self):
 #         return self.name
 
-class UserRole(models.Model):
+class UserRoles(models.Model):
     name = models.CharField(max_length=20)
     image = models.ImageField(upload_to='role_images/')
     description = models.CharField(max_length=200)
@@ -28,7 +28,7 @@ class User(models.Model):
     email = models.EmailField(max_length=254, unique=True)  # Email uzunligini oshirdik
     password = models.CharField(max_length=128)  # Parol uzunligini oshirdik
     phone_number = PhoneNumberField(unique=True)
-    role = models.OneToOneField(UserRole, on_delete=models.CASCADE)
+    role = models.OneToOneField(UserRoles, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='users/', blank=True, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
