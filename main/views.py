@@ -34,7 +34,7 @@ class CoursesView(View):
             'course_data': course_data
         }
 
-        return render(request, 'main/courses.html', ctx)
+        return render(request, 'course/courses.html', ctx)
 
     def post(self, request):
         form = CourseCreateForm(request.POST, request.FILES)
@@ -49,7 +49,7 @@ class CoursesView(View):
             'form': form
         }
 
-        return render(request, 'main/courses.html', ctx)
+        return render(request, 'course/courses.html', ctx)
 
 def course_update_view(request):
     # course = Course.objects.get(pk=course_id)
