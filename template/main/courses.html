@@ -21,48 +21,55 @@
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Create course</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Create course</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
 
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">Name</label>
-                    <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Course name">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="exampleFormControlInput1" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Course name"
+                               name="name">
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="file" class="form-control" id="inputGroupFile01" name="image">
+                        <label class="input-group-text" for="inputGroupFile01">Upload</label>
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleFormControlTextarea1" class="form-label">Description</label>
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
+                                  name="description"></textarea>
+                    </div>
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="inputGroupDate02">Start date</label>
+                        <input type="date" class="form-control" id="inputGroupDate02" name="start_time">
+                    </div>
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="inputGroupDate03">End date</label>
+                        <input type="date" class="form-control" id="inputGroupDate03" name="end_time">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Sum</span>
+                        <input type="number" class="form-control" aria-label="Amount (to the nearest dollar)"
+                               name="price">
+                        <span class="input-group-text">.00</span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleFormControlInput5" class="form-label">Available days</label>
+                        <input type="text" class="form-control" id="exampleFormControlInput5" name="schedule_days"
+                               placeholder="Example: Odd days">
+                    </div>
                 </div>
-                <div class="input-group mb-3">
-                    <input type="file" class="form-control" id="inputGroupFile01">
-                    <label class="input-group-text" for="inputGroupFile01">Upload</label>
-                </div>
-                <div class="mb-3">
-                    <label for="exampleFormControlTextarea1" class="form-label">Description</label>
-                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                </div>
-                <div class="input-group mb-3">
-                    <label class="input-group-text" for="inputGroupDate02">Start date</label>
-                    <input type="date" class="form-control" id="inputGroupDate02">
-                </div>
-                <div class="input-group mb-3">
-                    <label class="input-group-text" for="inputGroupDate03">End date</label>
-                    <input type="date" class="form-control" id="inputGroupDate03">
-                </div>
-                <div class="input-group mb-3">
-                    <span class="input-group-text">Sum</span>
-                    <input type="number" class="form-control" aria-label="Amount (to the nearest dollar)">
-                    <span class="input-group-text">.00</span>
-                </div>
-                <div class="mb-3">
-                    <label for="exampleFormControlInput5" class="form-label">Available days</label>
-                    <input type="text" class="form-control" id="exampleFormControlInput5"
-                        placeholder="Example: Odd days ">
-                </div>
-            </div>
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Create</button>
-            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+            </form>
+
         </div>
     </div>
 </div>
@@ -222,27 +229,30 @@
             </div>
         </div>
         <div class="row">
-
+            {% for course in course_data %}
             <div class="col-lg-4 mb-5">
                 <div class="card border-0 bg-light shadow-sm pb-2">
-                    <img class="card-img-top mb-2" src="{% static 'img/class-1.jpg' %}" alt="">
+                    {% if course.image %}
+                        <img class="card-img-top mb-2" src="{{ course.image.url }}" alt="kursni rasimi yo'q">
+                    {% else %}
+                        <img class="card-img-top mb-2" src="{% static 'img/class-1.jpg' %}" alt="">
+                    {% endif %}
                     <div class="card-body text-center">
-                        <h4 class="card-title">Drawing Class</h4>
-                        <p class="card-text">Justo ea diam stet diam ipsum no sit, ipsum vero et et diam ipsum duo
-                            et no et, ipsum ipsum erat duo amet clita duo</p>
+                        <h4 class="card-title">{{ course.name }}</h4>
+                        <p class="card-text">{{ course.description }}</p>
                     </div>
                     <div class="card-footer bg-transparent py-4 px-5 border-bottom">
                         <div class="row border-bottom">
                             <div class="col-6 py-1 text-right border-right"><strong>Avilable days</strong></div>
-                            <div class="col-6 py-1">Odd days</div>
+                            <div class="col-6 py-1">{{ course.schedule_days }}</div>
                         </div>
                         <div class="row border-bottom">
                             <div class="col-6 py-1 text-right border-right"><strong>Class Time</strong></div>
-                            <div class="col-6 py-1">08:00 - 10:00</div>
+                            <div class="col-6 py-1">{{ course.start_time }} and {{ course.end_time }}</div>
                         </div>
                         <div class="row border-bottom">
                             <div class="col-6 py-1 text-right border-right"><strong>Tution Fee</strong></div>
-                            <div class="col-6 py-1">Free</div>
+                            <div class="col-6 py-1">{{ course.price }} so'm</div>
                         </div>
                         <div class="row border-bottom">
                             <div class="col-6 py-1 text-right border-right"><strong>Tasks</strong></div>
@@ -265,82 +275,7 @@
 
                 </div>
             </div>
-
-            <div class="col-lg-4 mb-5">
-                <div class="card border-0 bg-light shadow-sm pb-2">
-                    <img class="card-img-top mb-2" src="{% static 'img/class-2.jpg' %}" alt="">
-                    <div class="card-body text-center">
-                        <h4 class="card-title">Language Learning</h4>
-                        <p class="card-text">Justo ea diam stet diam ipsum no sit, ipsum vero et et diam ipsum duo
-                            et no et, ipsum ipsum erat duo amet clita duo</p>
-                    </div>
-                    <div class="card-footer bg-transparent py-4 px-5 border-bottom">
-                        <div class="row border-bottom">
-                            <div class="col-6 py-1 text-right border-right"><strong>Avilable days</strong></div>
-                            <div class="col-6 py-1">Odd days</div>
-                        </div>
-                        <div class="row border-bottom">
-                            <div class="col-6 py-1 text-right border-right"><strong>Class Time</strong></div>
-                            <div class="col-6 py-1">08:00 - 10:00</div>
-                        </div>
-                        <div class="row border-bottom">
-                            <div class="col-6 py-1 text-right border-right"><strong>Tution Fee</strong></div>
-                            <div class="col-6 py-1">$30 / month</div>
-                        </div>
-                        <div class="row border-bottom">
-                            <div class="col-6 py-1 text-right border-right"><strong>Tasks</strong></div>
-                            <div class="col-6 py-1"><a href="#">See task</a></div>
-                        </div>
-                    </div>
-                    <div class="row mt-3 mb-3">
-                        <div class="col-6 text-right"><strong>Joined student</strong></div>
-                        <div class="col-6"><a href="{% url 'course_students' %}">Show</a></div>
-                    </div>
-                    <div class="d-flex">
-                        <a href="" class="btn btn-primary px-4 mx-auto mb-4" data-bs-toggle="modal"
-                            data-bs-target="#exampleModal2">Edit</a>
-                        <a href="" class="btn btn-warning px-4 mx-auto mb-4">Delete</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4 mb-5">
-                <div class="card border-0 bg-light shadow-sm pb-2">
-                    <img class="card-img-top mb-2" src="{% static 'img/class-3.jpg' %}" alt="">
-                    <div class="card-body text-center">
-                        <h4 class="card-title">Basic Science</h4>
-                        <p class="card-text">Justo ea diam stet diam ipsum no sit, ipsum vero et et diam ipsum duo
-                            et no et, ipsum ipsum erat duo amet clita duo</p>
-                    </div>
-                    <div class="card-footer bg-transparent py-4 px-5 border-bottom">
-                        <div class="row border-bottom">
-                            <div class="col-6 py-1 text-right border-right"><strong>Available days</strong></div>
-                            <div class="col-6 py-1">Odd days</div>
-                        </div>
-                        <div class="row border-bottom">
-                            <div class="col-6 py-1 text-right border-right"><strong>Class Time</strong></div>
-                            <div class="col-6 py-1">08:00 - 10:00</div>
-                        </div>
-                        <div class="row border-bottom">
-                            <div class="col-6 py-1 text-right border-right"><strong>Tution Fee</strong></div>
-                            <div class="col-6 py-1">$10 / month</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6 py-1 text-right border-right"><strong>Tasks</strong></div>
-                            <div class="col-6 py-1"><a href="#">See task</a></div>
-                        </div>
-                    </div>
-                    <div class="row mt-3 mb-3">
-                        <div class="col-6 text-right"><strong>Joined student</strong></div>
-                        <div class="col-6"><a href="{% url 'course_students' %}">Show</a></div>
-                    </div>
-                    <div class="d-flex">
-                        <a href="" class="btn btn-primary px-4 mx-auto mb-4" data-bs-toggle="modal"
-                            data-bs-target="#exampleModal3">Edit</a>
-                        <a href="" class="btn btn-warning px-4 mx-auto mb-4">Delete</a>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
 
         </div>
     </div>

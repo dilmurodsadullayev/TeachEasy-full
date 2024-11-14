@@ -63,8 +63,8 @@ class Course(models.Model):
     description = models.TextField()
     image = models.ImageField(upload_to='courses/')
     price = models.DecimalField(max_digits=5, decimal_places=2)
-    start_date = models.DateField()
-    end_date = models.DateField()  # tugash sanasi (oldingi
+    start_time = models.TimeField()
+    end_time = models.TimeField()  # tugash sanasi (oldingi
     schedule_days = models.CharField(max_length=70)  # o‘quv kunlari yoki `schedule` qisqacha
 
     def __str__(self):

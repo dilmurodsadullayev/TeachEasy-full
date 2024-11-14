@@ -1,5 +1,7 @@
-from django.shortcuts import render
-from .models import UserRoles, AboutSite
+from django.shortcuts import render, redirect
+from .models import UserRoles, AboutSite, Course
+from .forms import CourseCreateForm
+from django.views.generic import View
 
 
 # Create your views here.
@@ -22,8 +24,34 @@ def about_view(request):
 def contact_view(request):
     return render(request, 'main/contact.html')
 
-def courses_view(request):
-    return render(request, 'main/courses.html')
+
+
+class CoursesView(View):
+    def get(self, request):
+        course_data = Course.objects.all()
+
+        ctx = {
+            'course_data': course_data
+        }
+
+        return render(request, 'main/courses.html', ctx)
+
+    def post(self, request):
+        form = CourseCreateForm(request.POST, request.FILES)
+        if form.is_valid():
+            course = form.save(commit=False)
+            course.start_time = str(request.POST['start_time']) # Vaqt qiymatlarini str formatda olish
+            course.end_time = str(request.POST['end_time'])#vaqti str formatda course.save()
+            form.save()
+            return redirect('courses')
+
+        ctx = {
+            'form': form
+        }
+
+        return render(request, 'main/courses.html', ctx)
+
+
 
 def gallery_view(request):
     return render(request, 'main/gallery.html')
