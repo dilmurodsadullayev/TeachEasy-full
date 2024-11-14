@@ -25,7 +25,7 @@ def contact_view(request):
     return render(request, 'main/contact.html')
 
 
-
+#Course
 class CoursesView(View):
     def get(self, request):
         course_data = Course.objects.all()
@@ -50,6 +50,24 @@ class CoursesView(View):
         }
 
         return render(request, 'main/courses.html', ctx)
+
+def course_update_view(request):
+    # course = Course.objects.get(pk=course_id)
+
+    ctx = {
+        # 'course': course
+    }
+
+    return render(request, 'course/course_update.html', ctx)
+
+def course_delete_view(request):
+    ctx = {
+
+    }
+    return render(request, 'course/course_delete.html', ctx)
+
+
+
 
 
 
