@@ -9,7 +9,8 @@ from .models import (
     CourseTask,
     StudentTask,
     CoursePayment,
-    TeacherPayment
+    TeacherPayment,
+    AboutSite
 
 )
 # Register your models here.
@@ -24,6 +25,7 @@ admin.site.register(CourseTask)
 admin.site.register(StudentTask)
 admin.site.register(CoursePayment)
 admin.site.register(TeacherPayment)
+admin.site.register(AboutSite)
 
 
 
