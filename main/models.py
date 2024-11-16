@@ -1,4 +1,5 @@
 from django.db import models
+import datetime
 import phonenumbers
 from django.db.models import URLField
 from phonenumber_field.modelfields import PhoneNumberField
@@ -34,21 +35,14 @@ class UserRoles(models.Model):
 
 class User(models.Model):
     full_name = models.CharField(max_length=255)
-    birth_date = models.DateField()
+    birth_date = models.DateField(blank=True, null=True)
     address = models.TextField(blank=True)
     email = models.EmailField(max_length=254, unique=True)  # Email uzunligini oshirdik
     password = models.CharField(max_length=128)  # Parol uzunligini oshirdik
-    phone_number = PhoneNumberField(unique=True)
-    role = models.OneToOneField(UserRoles, on_delete=models.CASCADE)
+    phone_number = PhoneNumberField(unique=True,blank=True, null=True)
+    role = models.OneToOneField(UserRoles, on_delete=models.CASCADE,default=2)
     image = models.ImageField(upload_to='users/', blank=True, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
-
-    def is_admin(self):
-        return self.role.name == 'Admin'  # Agar foydalanuvchi admin bo'lsa, True qaytaradi
-
-    def is_teacher(self):
-        return self.role.name == "O'qituvchi" # Agar foydalanuvchi o'qituvchi bo'lsa, True qaytaradi
-
 
     def __str__(self):
         return self.full_name

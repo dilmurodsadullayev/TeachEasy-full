@@ -1,10 +1,13 @@
 from django.shortcuts import render, redirect
 from .models import UserRoles, AboutSite, Course
-from .forms import CourseCreateForm
+from .forms import CourseCreateForm,UserRegistrationForm,LoginForm
 from django.views.generic import View
+from django.contrib.auth import authenticate, login
 
 
-# Create your views here.
+# Create your views here
+
+
 def index_view(request):
     return render(request, 'main/index.html')
 
@@ -85,11 +88,38 @@ def course_students_view(request):
     return render(request, 'main/course_students.html')
 
 def signup_view(request):
-    return render(request, 'registration/sign_up.html')
+    form = UserRegistrationForm(request.POST)
+
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            return redirect('signin')
+    else:
+        form = UserRegistrationForm()
+
+    ctx = {
+        'form': form,
+    }
+    return render(request, 'registration/sign_up.html',ctx)
 
 
 def sign_in_view(request):
-    return render(request, 'registration/sign_in.html')
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            user = authenticate(request, email=email, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('index')
+            else:
+                form.add_error(None, "Invalid email or password")
+    else:
+        form = LoginForm()
+    ctx = { 'form': form, }
+    return render(request, 'registration/sign_in.html',ctx)
+
 
 def student_detail_view(request):
     return render(request, 'main/student_detail.html')

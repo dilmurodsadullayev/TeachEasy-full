@@ -24,20 +24,20 @@ background: linear-gradient(0deg, rgba(255,255,255,1) 2%, rgba(0,212,255,1) 100%
     <div class="container d-flex justify-content-center mt-5">
         <div class="form-container">
             <p class="title">Sign up</p>
-            <form class="form" action="POST">
+            <form class="form" method="post"> {% csrf_token %}
                 <div class="input-group">
-                    <label for="username">Username</label>
-                    <input type="text" name="username" id="username" required>
+                    <label for="full_name">Full Name</label>
+                    <input type="text" name="full_name" id="full_name" required>
                 </div>
                 <div class="input-group">
                     <label for="email">Email</label>
-                    <input type="email" name="Email" id="email" required>
+                    <input type="email" name="email" id="email" required>
                 </div>
                 <div class="input-group">
                     <label for="password">Password</label>
                     <input type="password" name="password" id="password" required>
                 </div>
-                <button class="sign mt-3">Sign up</button>
+                <button type="submit" class="sign mt-3">Sign up</button>
             </form>
             <p class="signup mt-3">Already have an account ?
                 <a rel="noopener noreferrer" href="{% url 'signin' %}" class="">Login</a>

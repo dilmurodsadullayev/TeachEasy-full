@@ -24,19 +24,19 @@ background: linear-gradient(0deg, rgba(255,255,255,1) 2%, rgba(0,212,255,1) 100%
     <div class="container d-flex justify-content-center mt-5">
         <div class="form-container">
             <p class="title">Login</p>
-            <form class="form">
+            <form class="form" method="post"> {% csrf_token %}
                 <div class="input-group">
-                    <label for="username">Username</label>
-                    <input type="text" name="username" id="username" placeholder="">
+                    <label for="email">Email</label>
+                    <input type="text" name="username" id="email" placeholder="Email ni kiriting">
                 </div>
                 <div class="input-group">
                     <label for="password">Password</label>
-                    <input type="password" name="password" id="password" placeholder="">
+                    <input type="password" name="password" id="password" placeholder="Parolni kiriting">
                     <div class="forgot">
                         <a rel="noopener noreferrer" href="#">Forgot Password ?</a>
                     </div>
                 </div>
-                <button class="sign">Sign in</button>
+                <button type="submit" class="sign">Sign in</button>
             </form>
             <div class="social-message">
                 <div class="line"></div>
@@ -65,6 +65,17 @@ background: linear-gradient(0deg, rgba(255,255,255,1) 2%, rgba(0,212,255,1) 100%
             <a href="{% url 'index' %}" class="text-info text-decoration-none"><i class="bi bi-arrow-left"
                     style="padding-right: 7px;"></i>Main page</a>
         </div>
+        {% if form.errors %}
+        <div class="errors">
+            {% for field in form %}
+                {% for error in field.errors %}
+                <p>{{ error }}</p>
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+            <p>{{ error }}</p>
+            {% endfor %} </div>
+        {% endif %}
 
     </div>
 </body>
