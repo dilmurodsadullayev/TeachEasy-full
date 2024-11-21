@@ -49,30 +49,34 @@ def contact_view(request):
 
 
 #Course
+
 class CoursesView(View):
-    def get(self, request):
-        course_data = Course.objects.all()
-
-        ctx = {
-            'course_data': course_data
-        }
-
-        return render(request, 'course/courses.html', ctx)
-
+    template_name = 'course/courses.html'
     def post(self, request):
         form = CourseCreateForm(request.POST, request.FILES)
         if form.is_valid():
-            course = form.save(commit=False)
-            course.start_time = str(request.POST['start_time']) # Vaqt qiymatlarini str formatda olish
-            course.end_time = str(request.POST['end_time'])#vaqti str formatda course.save()
             form.save()
             return redirect('courses')
+        else:
+            print('Form is invalid:', form.errors)
+
+        # Render the form with errors if validation fails
+        course_data = Course.objects.all()
+        ctx = {
+            'form': form,
+            'course_data': course_data
+        }
+        return render(request, self.template_name, ctx)
+
+    def get(self, request):
+        course_data = Course.objects.all()
+        form = CourseCreateForm()
 
         ctx = {
+            'course_data': course_data,
             'form': form
         }
-
-        return render(request, 'course/courses.html', ctx)
+        return render(request, self.template_name, ctx)
 
 def course_update_view(request):
     # course = Course.objects.get(pk=course_id)
@@ -81,14 +85,13 @@ def course_update_view(request):
         # 'course': course
     }
 
-    return render(request, 'course/course_update.html', ctx)
+    return render(request, 'course/course_edit.html', ctx)
 
 def course_delete_view(request):
     ctx = {
 
     }
     return render(request, 'course/course_delete.html', ctx)
-
 
 
 
@@ -189,4 +192,8 @@ def teacher_detail_view(request):
 def profile_view(request):
     return render(request, 'main/profile.html')
     
+
+
+def error_404_view(request):
+    return render(request,'main/404.html')
 
