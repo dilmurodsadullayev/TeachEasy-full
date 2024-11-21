@@ -1,5 +1,6 @@
 {% extends "main/base.html" %}
 {% load static %}
+{% load custom_filters %}
 {% block title %} home {% endblock title %}
 {% block content %}
 
@@ -28,81 +29,57 @@
             <p class="section-title px-5"><span class="px-2">Testimonial</span></p>
             <h1 class="mb-4">What Parents Say!</h1>
         </div>
+        {% if user_says %}
         <div class="owl-carousel testimonial-carousel">
+            {% for user_say in user_says %}
+
             <div class="testimonial-item px-3">
                 <div class="bg-light shadow-sm rounded mb-4 p-4">
                     <h3 class="fas fa-quote-left text-primary mr-3"></h3>
-                    Sed ea amet kasd elitr stet, stet rebum et ipsum est duo elitr eirmod clita lorem. Dolor tempor
-                    ipsum clita
+                    {{ user_say.message }}
                 </div>
                 <div class="d-flex align-items-center">
+                    {% if user_say.user.image %}
+                    <img class="rounded-circle" src="{{ user_say.user.image.url }}" style="width: 70px; height: 70px;"
+                        alt="Image">
+                    {% else %}
                     <img class="rounded-circle" src="{% static 'img/testimonial-1.jpg' %}"
                         style="width: 70px; height: 70px;" alt="Image">
+                    {% endif %}
+
                     <div class="pl-3">
-                        <h5>Parent Name</h5>
-                        <i>Profession</i>
+                        <h5>{{ user_say.user.username }}</h5>
+                        <i>{{ user_say.created_time }}</i>
                     </div>
                 </div>
             </div>
-            <div class="testimonial-item px-3">
-                <div class="bg-light shadow-sm rounded mb-4 p-4">
-                    <h3 class="fas fa-quote-left text-primary mr-3"></h3>
-                    Sed ea amet kasd elitr stet, stet rebum et ipsum est duo elitr eirmod clita lorem. Dolor tempor
-                    ipsum clita
-                </div>
-                <div class="d-flex align-items-center">
-                    <img class="rounded-circle" src="{% static 'img/testimonial-2.jpg' %}"
-                        style="width: 70px; height: 70px;" alt="Image">
-                    <div class="pl-3">
-                        <h5>Parent Name</h5>
-                        <i>Profession</i>
-                    </div>
-                </div>
-            </div>
-            <div class="testimonial-item px-3">
-                <div class="bg-light shadow-sm rounded mb-4 p-4">
-                    <h3 class="fas fa-quote-left text-primary mr-3"></h3>
-                    Sed ea amet kasd elitr stet, stet rebum et ipsum est duo elitr eirmod clita lorem. Dolor tempor
-                    ipsum clita
-                </div>
-                <div class="d-flex align-items-center">
-                    <img class="rounded-circle" src="{% static 'img/testimonial-3.jpg' %}"
-                        style="width: 70px; height: 70px;" alt="Image">
-                    <div class="pl-3">
-                        <h5>Parent Name</h5>
-                        <i>Profession</i>
-                    </div>
-                </div>
-            </div>
-            <div class="testimonial-item px-3">
-                <div class="bg-light shadow-sm rounded mb-4 p-4">
-                    <h3 class="fas fa-quote-left text-primary mr-3"></h3>
-                    Sed ea amet kasd elitr stet, stet rebum et ipsum est duo elitr eirmod clita lorem. Dolor tempor
-                    ipsum clita
-                </div>
-                <div class="d-flex align-items-center">
-                    <img class="rounded-circle" src="{% static 'img/testimonial-4.jpg' %}"
-                        style="width: 70px; height: 70px;" alt="Image">
-                    <div class="pl-3">
-                        <h5>Parent Name</h5>
-                        <i>Profession</i>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
+        {% else %}
+        <h4 class="text-center">Habarlar mavjud emas</h4>
+        {% endif %}
     </div>
 </div>
 <!-- Testimonial End -->
 
 
 <div class="container">
-    <form action="" method="post">
+    <form action="{% url 'index' %}" method="post">
+        {% csrf_token %}
         <div class="mb-3">
-            <h1><label for="exampleFormControlTextarea1" class="form-label">Comment</label></h1>
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3">Type comment...</textarea>
+            <h1>
+                <label for="commentTextarea" class="form-label">Comment</label>
+            </h1>
+            <textarea class="form-control" id="commentTextarea" rows="3" name="message"
+                placeholder="Typing comment..."></textarea>
         </div>
+        {% if form.errors.message %}
+        <div class="text-danger">
+            {{ form.errors.message }}
+        </div>
+        {% endif %}
         <div class="d-flex justify-content-end">
-            <input type="submit" value="submit" class="btn btn-success">
+            <input type="submit" value="Submit" class="btn btn-success">
         </div>
     </form>
 </div>

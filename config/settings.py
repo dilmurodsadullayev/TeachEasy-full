@@ -19,10 +19,20 @@ from decouple import config
 
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
-DATABASES = {
-    'default': dj_database_url.parse(config('DATABASE_URL'))
-}
+# DATABASES = {
+#     'default': dj_database_url.parse(config('DATABASE_URL'))
+# }
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': config('DBNAME'), 
+        'USER': config('DBUSER'),
+        'PASSWORD': config('DBPASS'),
+        'HOST': config('DBHOST'),
+        'PORT': config('DBPORT'),
+    }
+}
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
@@ -41,7 +51,13 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     'main',
     'phonenumber_field', # telefon raqamlar uchun maydon yani field
+    'crispy_forms',
+    "crispy_bootstrap5",
 ]
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -72,9 +88,15 @@ TEMPLATES = [
     },
 ]
 
+AUTH_USER_MODEL = 'main.CustomUser'
+
+
 WSGI_APPLICATION = "config.wsgi.application"
-
-
+# settings.py
+# AUTHENTICATION_BACKENDS = [
+#     'django.contrib.auth.backends.ModelBackend',  # Default Django backend (optional)
+#     # 'main.authentication_backends.EmailAuthBackend',  # Path to your custom backend
+# ]
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
@@ -130,7 +152,10 @@ STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.AppDirectoriesFinder'
 ]
 
-MEDIA_ROOT = BASE_DIR / 'media'
+import os
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 # Default primary key field type
@@ -138,6 +163,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # settings.py
-LOGIN_URL = 'login'
+
+LOGIN_URL = '/login/'  # Kirish sahifangiz URL-manzilini ko‘rsating
+
 LOGIN_REDIRECT_URL = 'index'  # Login qilgandan keyin qayta yo'naltirish uchun URL
 LOGOUT_REDIRECT_URL = 'index'  # Logout qilgandan keyin qayta yo'naltirish uchun URL

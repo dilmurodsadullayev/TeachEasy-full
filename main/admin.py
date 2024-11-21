@@ -1,7 +1,6 @@
 from django.contrib import admin
 from .models import (
-    UserRoles,
-    User,
+    CustomUser,
     Course,
     CourseStudent,
     Attendance,
@@ -10,13 +9,15 @@ from .models import (
     StudentTask,
     CoursePayment,
     TeacherPayment,
-    AboutSite
+    AboutSite,
+    UserSay
 
 )
 # Register your models here.
+class UserSayAdmin(admin.ModelAdmin):
+    list_display = ('user', 'message', 'created_time') 
 
-admin.site.register(UserRoles)
-admin.site.register(User)
+admin.site.register(CustomUser)
 admin.site.register(Course)
 admin.site.register(CourseStudent)
 admin.site.register(Attendance)
@@ -26,6 +27,7 @@ admin.site.register(StudentTask)
 admin.site.register(CoursePayment)
 admin.site.register(TeacherPayment)
 admin.site.register(AboutSite)
+admin.site.register(UserSay,UserSayAdmin)
 
 
 

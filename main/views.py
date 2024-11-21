@@ -1,24 +1,44 @@
 from django.shortcuts import render, redirect
-from .models import UserRoles, AboutSite, Course
-from .forms import CourseCreateForm,UserRegistrationForm,LoginForm
+from .models import AboutSite, Course,UserSay,CustomUser
+from .forms import CourseCreateForm,UserSayForm,CustomUserCreationForm
 from django.views.generic import View
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import get_user_model,authenticate, login
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.hashers import make_password
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here
 
+class IndexView(LoginRequiredMixin,View):
+    def post(self, request):
+        form = UserSayForm(request.POST)
+        if form.is_valid():
+            user_say = form.save(user=request.user)  # Foydalanuvchini avtomatik qo'shish
+            return redirect('index')
+        else:
+            ctx = {'form': form}
+    
+        return render(request, 'main/index.html', ctx)
 
-def index_view(request):
-    return render(request, 'main/index.html')
+    def get(self, request): 
+        user_says = UserSay.objects.all()
+
+        ctx = { 
+            'user_says': user_says
+        } 
+        return render(request, 'main/index.html', ctx)
+
+    
 
 
 
 def about_view(request):
-    user_roles = UserRoles.objects.all()
     about_sites = AboutSite.objects.all()
 
     ctx = {
-        'user_roles': user_roles,
         'about_sites': about_sites
     }
     return render(request, 'main/about.html',ctx)
@@ -88,37 +108,47 @@ def course_students_view(request):
     return render(request, 'main/course_students.html')
 
 def signup_view(request):
-    form = UserRegistrationForm(request.POST)
-
-    if request.method == "POST":
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            return redirect('signin')
+            user = form.save(commit=False)
+            user.role = 'STUDENT'  # Default rolni belgilash
+            user.save()
+            login(request, user)  # Foydalanuvchini tizimga kiritamiz
+            return redirect('index')  # Bosh sahifaga yo'naltirish
+        else:
+            # Agar xatolik bo'lsa, u xatolikni foydalanuvchiga ko'rsatamiz
+            print(form.errors)
     else:
-        form = UserRegistrationForm()
+        form = CustomUserCreationForm()
+    return render(request, 'registrations/sign_up.html', {'form': form})
 
-    ctx = {
-        'form': form,
-    }
-    return render(request, 'registration/sign_up.html',ctx)
+
 
 
 def sign_in_view(request):
-    if request.method == "POST":
-        form = LoginForm(request.POST)
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
-            email = form.cleaned_data['email']
+            username = form.cleaned_data['username']
             password = form.cleaned_data['password']
-            user = authenticate(request, email=email, password=password)
+            user = authenticate(username=username, password=password)
             if user is not None:
-                login(request, user)
-                return redirect('index')
+                login(request, user)  # Foydalanuvchini tizimga kiritamiz
+                return redirect('index')  # Bosh sahifaga yo'naltirish
             else:
-                form.add_error(None, "Invalid email or password")
+                messages.error(request, "Foydalanuvchi nomi yoki parol noto‘g‘ri")
+        else:
+            messages.error(request, "Foydalanuvchi nomi yoki parol noto‘g‘ri")
     else:
-        form = LoginForm()
-    ctx = { 'form': form, }
-    return render(request, 'registration/sign_in.html',ctx)
+        form = AuthenticationForm()
+
+    return render(request, 'registrations/sign_in.html', {'form': form})
+
+
+def logout_view(request):
+    logout(request)  # Foydalanuvchini tizimdan chiqarish
+    return redirect('index')
 
 
 def student_detail_view(request):

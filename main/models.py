@@ -3,6 +3,9 @@ import datetime
 import phonenumbers
 from django.db.models import URLField
 from phonenumber_field.modelfields import PhoneNumberField
+from enum import Enum
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth.models import AbstractUser
 
 
 class AboutSite(models.Model):
@@ -22,33 +25,58 @@ class AboutSite(models.Model):
         return self.name
 
 
-class UserRoles(models.Model):
-    name = models.CharField(max_length=20)
-    image = models.ImageField(upload_to='role_images/')
-    description = models.CharField(max_length=200)
 
-    def __str__(self):
-        return self.name
+class UserRoleEnum(Enum):
+    ADMIN = 'Admin'
+    TEACHER = 'Teacher'
+    STUDENT = 'Student'
 
+    @classmethod
+    def choices(cls):
+        return [(role.name, role.value) for role in cls]
 
-
-
-class User(models.Model):
-    full_name = models.CharField(max_length=255)
+class CustomUser(AbstractUser):
     birth_date = models.DateField(blank=True, null=True)
     address = models.TextField(blank=True)
-    email = models.EmailField(max_length=254, unique=True)  # Email uzunligini oshirdik
-    password = models.CharField(max_length=128)  # Parol uzunligini oshirdik
-    phone_number = PhoneNumberField(unique=True,blank=True, null=True)
-    role = models.OneToOneField(UserRoles, on_delete=models.CASCADE,default=2)
+    phone_number = PhoneNumberField(unique=True, blank=True, null=True)
+    role = models.CharField(
+        max_length=20,
+        choices=UserRoleEnum.choices(),
+        default=UserRoleEnum.STUDENT.name
+    )
     image = models.ImageField(upload_to='users/', blank=True, null=True)
-    timestamp = models.DateTimeField(auto_now_add=True)
+
+    
+    def __str__(self):
+        return self.get_full_name() or self.email or self.username
+
+    def get_role_display(self):
+        return UserRoleEnum[self.role].value
+
+    def clean(self):
+        super().clean()
+        if self.role not in UserRoleEnum.__members__:
+            raise ValidationError({'role': 'Invalid role specified.'})
+
+    def is_admin(self):
+        return self.role == UserRoleEnum.ADMIN.name
+
+    def is_teacher(self):
+        return self.role == UserRoleEnum.TEACHER.name
+
+    def is_student(self):
+        return self.role == UserRoleEnum.STUDENT.name
+
+class UserSay(models.Model):
+    user = models.ForeignKey(CustomUser,on_delete=models.CASCADE,related_name='user_says')
+    message = models.CharField(max_length=150)
+    created_time = models.DateTimeField(auto_now_add=True)  # Yangi nom bilan yangilangan
+
+
 
     def __str__(self):
-        return self.full_name
-
-
-
+        return f"{self.user.get_full_name() or self.user.username}: {self.message}"
+        
 
 
 
@@ -67,8 +95,8 @@ class Course(models.Model):
 
 class CourseStudent(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='course_students')
-    teacher = models.ForeignKey(User, on_delete=models.CASCADE, related_name='course_teachers')
+    student = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='course_students')
+    teacher = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='course_teachers')
     start_date = models.DateField()
 
     def __str__(self):
@@ -84,7 +112,7 @@ class Attendance(models.Model):
 
 
 class Mark(models.Model):
-    student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='marks')
+    student = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='marks')
     attendance = models.ForeignKey(Attendance, on_delete=models.CASCADE)
     is_attended = models.BooleanField(default=False)  # is_attendent o'rniga is_attended
 
@@ -107,7 +135,7 @@ class CourseTask(models.Model):
 
 
 class StudentTask(models.Model):
-    student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='student_tasks')
+    student = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='student_tasks')
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     description = models.TextField()
@@ -121,7 +149,7 @@ class StudentTask(models.Model):
 
 class CoursePayment(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='payments')
+    student = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='payments')
     price = models.FloatField()
     pay_date = models.DateField()
     payment_method = models.CharField(max_length=20)  # Bu yerga tanlov qo'shishingiz mumkin
@@ -133,7 +161,7 @@ class CoursePayment(models.Model):
 
 
 class TeacherPayment(models.Model):
-    teacher = models.ForeignKey(User, on_delete=models.CASCADE, related_name='teacher_payments')
+    teacher = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='teacher_payments')
     price = models.DecimalField(max_digits=5, decimal_places=2)
     image = models.ImageField(upload_to='teacher_payments/')
     is_paid = models.BooleanField(default=False)

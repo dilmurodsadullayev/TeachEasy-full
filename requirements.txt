@@ -26,9 +26,11 @@ cffi==1.17.1
 charset-normalizer==3.4.0
 click==8.1.7
 colorama==0.4.6
+crispy-bootstrap5==2024.10
 cryptography==43.0.3
 dj-database-url==2.3.0
 Django==5.1.2
+django-crispy-forms==2.3
 django-phonenumber-field==8.0.0
 dnspython==2.7.0
 email_validator==2.2.0
@@ -94,6 +96,7 @@ protobuf==5.28.3
 psutil==6.0.0
 psycopg==3.2.1
 psycopg-binary==3.2.1
+psycopg2==2.9.10
 psycopg2-binary==2.9.10
 pyasn1==0.6.1
 pyasn1_modules==0.4.1

@@ -1,7 +1,8 @@
 from django.conf.urls.i18n import urlpatterns
 from django.urls import path
+from django.contrib.auth.views import LogoutView
 from .views import (
-    index_view,
+    IndexView,
     about_view,
     contact_view,
     teachers_view,
@@ -31,7 +32,7 @@ from .views import (
 
 )
 urlpatterns = [
-    path('',index_view,name='index'),
+    path('',IndexView.as_view(),name='index'),
     path('about',about_view,name='about'),
     path('contact',contact_view,name='contact'),
     path('teachers',teachers_view,name='teachers'),
@@ -44,8 +45,10 @@ urlpatterns = [
     path('course-delete',course_delete_view,name='course_delete'),
     path('course-students',course_students_view,name='course_students'),
     # registration
-    path('sign-up',signup_view,name='signup'),
-    path('sign-in',sign_in_view,name='signin'),
+    path('signup',signup_view,name='signup'),
+    path('login/',sign_in_view,name='login'),
+    path('logout/', LogoutView.as_view(), name='logout'),
+    
     #students
     path('student-detail',student_detail_view,name='student_detail'),
     path('group-tasks',group_tasks_view,name='group_tasks'),
