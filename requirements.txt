@@ -86,7 +86,6 @@ oauthlib==3.2.2
 packaging==24.1
 paramiko==3.5.0
 passlib==1.7.4
-pgadmin4==8.12
 phonenumbers==8.13.48
 pillow==11.0.0
 portalocker==2.10.1

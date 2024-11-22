@@ -5,14 +5,15 @@ from django.views.generic import View
 from django.contrib.auth import get_user_model,authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.hashers import make_password
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 
 # Create your views here
 
-class IndexView(LoginRequiredMixin,View):
+class IndexView(View):
+    @method_decorator(login_required)
     def post(self, request):
         form = UserSayForm(request.POST)
         if form.is_valid():
@@ -20,8 +21,8 @@ class IndexView(LoginRequiredMixin,View):
             return redirect('index')
         else:
             ctx = {'form': form}
-    
-        return render(request, 'main/index.html', ctx)
+            
+        return render(request, 'main/index.html', ctx)            
 
     def get(self, request): 
         user_says = UserSay.objects.all()
@@ -108,7 +109,7 @@ def blogs_view(request):
     return render(request, 'main/blog.html')
 
 def course_students_view(request):
-    return render(request, 'main/course_students.html')
+    return render(request, 'course/course_students.html')
 
 def signup_view(request):
     if request.method == 'POST':
@@ -195,5 +196,6 @@ def profile_view(request):
 
 
 def error_404_view(request):
-    return render(request,'main/404.html')
+    return render(request,'main/404.html'
+    )
 
