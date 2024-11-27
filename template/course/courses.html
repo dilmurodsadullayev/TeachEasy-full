@@ -233,7 +233,8 @@
             <div class="col-lg-4 mb-5">
                 <div class="card border-0 bg-light shadow-sm pb-2">
                     {% if course.image.url %}
-                    <img class="card-img-top mb-2" src="{{ course.image.url }}" alt="coruse ni rasimi yo'q">
+                    <img class="card-img-top mb-2" style="width: 349px; height: 233px;" src="{{ course.image.url }}"
+                        alt="coruse ni rasimi yo'q">
                     {% else %}
                     <img class="card-img-top mb-2" src="{% static 'img/class-1.jpg' %}" alt="">
                     {% endif %}

@@ -8,23 +8,6 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser
 
 
-class AboutSite(models.Model):
-    name = models.CharField(max_length=20)
-    description = models.TextField()
-    creator_name = models.CharField(max_length=20)
-    address = models.CharField(max_length=140)
-    email = models.EmailField()
-    phone = PhoneNumberField()
-    instagram_url: URLField = models.URLField()
-    telegram_url = models.URLField()
-    instagram_url = models.URLField()
-    github_url = models.URLField()
-    linkedin_url = models.URLField()
-
-    def __str__(self):
-        return self.name
-
-
 
 class UserRoleEnum(Enum):
     ADMIN = 'Admin'
@@ -48,7 +31,7 @@ class CustomUser(AbstractUser):
 
     
     def __str__(self):
-        return self.get_full_name() or self.email or self.username
+        return self.get_full_name() or self.username
 
     def get_role_display(self):
         return UserRoleEnum[self.role].value
@@ -77,6 +60,29 @@ class UserSay(models.Model):
     def __str__(self):
         return f"{self.user.get_full_name() or self.user.username}: {self.message}"
         
+    
+class Student(models.Model):
+    user = models.ForeignKey(CustomUser,on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.username
+
+
+class Teacher(models.Model):
+    user = models.ForeignKey(CustomUser,on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.username
+
+class Owner(models.Model):
+    user = models.ForeignKey(CustomUser,on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.username
+
+
+# class OwnerCourse(models.Model):
+#     own = models.ForeignKey()
 
 
 
@@ -84,10 +90,12 @@ class Course(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField()
     image = models.ImageField(upload_to='courses/')
-    price = models.DecimalField(max_digits=5, decimal_places=2)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
     start_time = models.TimeField()
-    end_time = models.TimeField()  # tugash sanasi (oldingi
-    schedule_days = models.CharField(max_length=70)  # o‘quv kunlari yoki `schedule` qisqacha
+    end_time = models.TimeField()  
+    schedule_days = models.CharField(max_length=70)  
+    teacher = models.ForeignKey(Teacher,on_delete=models.SET_NULL,null=True)
+
 
     def __str__(self):
         return self.name
@@ -95,8 +103,8 @@ class Course(models.Model):
 
 class CourseStudent(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    student = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='course_students')
-    teacher = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='course_teachers')
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='course_students')
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='course_teachers')
     start_date = models.DateField()
 
     def __str__(self):
@@ -104,7 +112,7 @@ class CourseStudent(models.Model):
 
 
 class Attendance(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course = models.ForeignKey(CourseStudent, on_delete=models.CASCADE)
     date = models.DateField()
 
     def __str__(self):
@@ -112,7 +120,7 @@ class Attendance(models.Model):
 
 
 class Mark(models.Model):
-    student = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='marks')
+    student = models.ForeignKey(CourseStudent, on_delete=models.CASCADE, related_name='marks')
     attendance = models.ForeignKey(Attendance, on_delete=models.CASCADE)
     is_attended = models.BooleanField(default=False)  # is_attendent o'rniga is_attended
 
@@ -124,23 +132,24 @@ class Mark(models.Model):
 
 
 class CourseTask(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course = models.ForeignKey(CourseStudent, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     description = models.TextField()
-    start_date = models.DateField()
-    end_date = models.DateField()
+    given_date = models.DateField()
+    until_date = models.DateField()
+    is_done = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.course.name} - {self.name}"
 
 
 class StudentTask(models.Model):
-    student = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='student_tasks')
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    student = models.ForeignKey(CourseStudent, on_delete=models.CASCADE, related_name='student_tasks')
+    course = models.ForeignKey(CourseStudent, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     description = models.TextField()
-    start_date = models.DateField()
-    end_date = models.DateField()
+    given_date = models.DateField()
+    until_date = models.DateField()
     is_done = models.BooleanField(default=False)
 
     def __str__(self):
@@ -148,8 +157,8 @@ class StudentTask(models.Model):
 
 
 class CoursePayment(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    student = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='payments')
+    course = models.ForeignKey(CourseStudent, on_delete=models.CASCADE)
+    student = models.ForeignKey(CourseStudent, on_delete=models.CASCADE, related_name='payments')
     price = models.FloatField()
     pay_date = models.DateField()
     payment_method = models.CharField(max_length=20)  # Bu yerga tanlov qo'shishingiz mumkin
@@ -161,8 +170,8 @@ class CoursePayment(models.Model):
 
 
 class TeacherPayment(models.Model):
-    teacher = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='teacher_payments')
-    price = models.DecimalField(max_digits=5, decimal_places=2)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='teacher_payments')
+    price = models.DecimalField(max_digits=10, decimal_places=2)
     image = models.ImageField(upload_to='teacher_payments/')
     is_paid = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)

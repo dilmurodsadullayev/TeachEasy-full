@@ -41,10 +41,10 @@
                 <div class="d-flex align-items-center">
                     {% if user_say.user.image %}
                     <img class="rounded-circle" src="{{ user_say.user.image.url }}" style="width: 70px; height: 70px;"
-                        alt="Image">
+                        alt="Not Image">
                     {% else %}
-                    <img class="rounded-circle" src="{% static 'img/testimonial-1.jpg' %}"
-                        style="width: 70px; height: 70px;" alt="Image">
+                    <img class="rounded-circle" src="{% static 'img/user.png' %}" style="width: 70px; height: 70px;"
+                        alt="Not Image">
                     {% endif %}
 
                     <div class="pl-3">

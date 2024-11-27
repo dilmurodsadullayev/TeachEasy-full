@@ -1,5 +1,5 @@
-from django.shortcuts import render, redirect
-from .models import AboutSite, Course,UserSay,CustomUser
+from django.shortcuts import get_object_or_404, redirect,render
+from .models import Course,UserSay,CustomUser,Student,Teacher
 from .forms import CourseCreateForm,UserSayForm,CustomUserCreationForm
 from django.views.generic import View
 from django.contrib.auth import get_user_model,authenticate, login
@@ -37,10 +37,10 @@ class IndexView(View):
 
 
 def about_view(request):
-    about_sites = AboutSite.objects.all()
+    
 
     ctx = {
-        'about_sites': about_sites
+    
     }
     return render(request, 'main/about.html',ctx)
 
@@ -53,37 +53,90 @@ def contact_view(request):
 
 class CoursesView(View):
     template_name = 'course/courses.html'
+
+    def get(self, request):
+        # if not request.user.is_authenticated:
+        #     messages.error(request, "Tizimga kirishingiz kerak.")
+        #     return redirect('login')
+        if request.user.is_authenticated:
+
+            if request.user.role == "ADMIN" or request.user.role == "STUDENT":
+                # ADMIN uchun barcha kurslar
+                course_data = Course.objects.all()
+                form = CourseCreateForm()
+                ctx = {
+                    'course_data': course_data,
+                    'form': form,
+                }
+                return render(request, self.template_name, ctx)
+            
+            elif request.user.role == "TEACHER":
+                # O'qituvchi faqat o'z kurslarini ko'radi
+                
+                teacher_id = Teacher.objects.get(user=request.user.id)
+                print(teacher_id)
+                course_data = Course.objects.filter(teacher=teacher_id)
+                form = CourseCreateForm()
+                ctx = {
+                    'course_data': course_data,
+                    'form': form,
+                }
+                return render(request, self.template_name, ctx)
+            
+            else:
+                # Boshqa foydalanuvchilar uchun bu sahifani ko'rsatmaslik
+                messages.error(request, "Sizda kurslar ro'yxatini ko'rish yoki yaratish huquqi yo'q.")
+                return redirect('index')  # Yoki boshqa sahifaga yo'naltirish
+        else:
+            course_data = Course.objects.all()
+            form = CourseCreateForm()
+            ctx = {
+                'course_data': course_data,
+                'form': form,
+            }
+            return render(request, self.template_name, ctx)
+            
     def post(self, request):
+        # Foydalanuvchi tizimga kirganmi?
+        if not request.user.is_authenticated:
+            messages.error(request, "Kurs yaratish uchun tizimga kirishingiz kerak.")
+            return redirect('login')
+
         form = CourseCreateForm(request.POST, request.FILES)
+
         if form.is_valid():
-            form.save()
+            course = form.save(commit=False)
+
+            # Faqat Admin yoki O'qituvchi kurs yaratishi mumkin
+            if request.user.role == "TEACHER":
+                teacher, created = Teacher.objects.get_or_create(user=request.user)
+                course.teacher = teacher
+            else:
+                messages.error(request, 'Faqat Admin yoki O\'qituvchi kurs yaratishi mumkin.')
+                return redirect('courses')
+
+            course.save()
+            messages.success(request, 'Kurs muvaffaqiyatli yaratildi!')
             return redirect('courses')
         else:
-            print('Form is invalid:', form.errors)
+            messages.error(request, 'Formada xatoliklar mavjud.')
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field}: {error}")
 
-        # Render the form with errors if validation fails
+        # Agar form noto'g'ri bo'lsa, kurslarni qayta yuklab va formni ko'rsatamiz
         course_data = Course.objects.all()
         ctx = {
             'form': form,
-            'course_data': course_data
-        }
-        return render(request, self.template_name, ctx)
-
-    def get(self, request):
-        course_data = Course.objects.all()
-        form = CourseCreateForm()
-
-        ctx = {
             'course_data': course_data,
-            'form': form
         }
         return render(request, self.template_name, ctx)
 
-def course_update_view(request):
-    # course = Course.objects.get(pk=course_id)
+def course_update_view(request,course_id):
+    course = Course.objects.get(pk=course_id)
 
     ctx = {
-        # 'course': course
+        'course': course
     }
 
     return render(request, 'course/course_edit.html', ctx)
@@ -118,6 +171,14 @@ def signup_view(request):
             user = form.save(commit=False)
             user.role = 'STUDENT'  # Default rolni belgilash
             user.save()
+
+            # filter yordamida faqat bitta studentni olish
+            student = Student.objects.filter(user=user).first()  # Birinchi studentni olish
+
+            if not student:
+                # Agar student mavjud bo'lmasa, yangi yaratamiz
+                Student.objects.create(user=user)
+
             login(request, user)  # Foydalanuvchini tizimga kiritamiz
             return redirect('index')  # Bosh sahifaga yo'naltirish
         else:
@@ -125,6 +186,7 @@ def signup_view(request):
             print(form.errors)
     else:
         form = CustomUserCreationForm()
+
     return render(request, 'registrations/sign_up.html', {'form': form})
 
 
@@ -199,3 +261,11 @@ def error_404_view(request):
     return render(request,'main/404.html'
     )
 
+
+
+
+def change_user_role(request, user_id, new_role):
+    user = get_object_or_404(CustomUser, id=user_id)
+    user.role = new_role
+    user.save()  # Signal avtomatik ravishda ishlaydi
+    return redirect('user_list') 

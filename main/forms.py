@@ -3,7 +3,7 @@ from markdown_it.rules_inline import image
 
 from main.models import Course,UserSay,CustomUser
 from django.contrib.auth.forms import UserCreationForm
-from .models import CustomUser,Course
+from .models import CustomUser,Course,Teacher
 
 class CustomUserCreationForm(UserCreationForm):
     password1 = forms.CharField(
@@ -34,7 +34,12 @@ class CustomUserCreationForm(UserCreationForm):
 class CourseCreateForm(forms.ModelForm):
     class Meta:
         model = Course
-        fields = '__all__'
+        fields = ['name', 'description', 'image', 'price', 'start_time', 'end_time', 'schedule_days','teacher']
+
+    # teacher maydonini formada ko'rsatmaslik
+    teacher = forms.ModelChoiceField(queryset=Teacher.objects.all(), required=False)
+
+
 
 class UserSayForm(forms.ModelForm):
     class Meta:
