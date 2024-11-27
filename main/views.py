@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect,render
 from .models import Course,UserSay,CustomUser,Student,Teacher
-from .forms import CourseCreateForm,UserSayForm,CustomUserCreationForm
+from .forms import CourseCreateForm,UserSayForm,CustomUserCreationForm,CourseUpdateForm
 from django.views.generic import View
 from django.contrib.auth import get_user_model,authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
@@ -8,6 +8,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.http import HttpResponse
+
 
 
 # Create your views here
@@ -74,7 +76,6 @@ class CoursesView(View):
                 # O'qituvchi faqat o'z kurslarini ko'radi
                 
                 teacher_id = Teacher.objects.get(user=request.user.id)
-                print(teacher_id)
                 course_data = Course.objects.filter(teacher=teacher_id)
                 form = CourseCreateForm()
                 ctx = {
@@ -132,18 +133,38 @@ class CoursesView(View):
         }
         return render(request, self.template_name, ctx)
 
-def course_update_view(request,course_id):
-    course = Course.objects.get(pk=course_id)
+def course_update_view(request,pk):
+    course = get_object_or_404(Course,pk=pk)
+
+    form = CourseUpdateForm(request.POST,instance=course)
+    
+    if request.method == "POST":
+        form = CourseUpdateForm(request.POST, instance=course)
+        if form.is_valid():
+            form.save()
+            return redirect('courses')  # Kurslar ro'yxati sahifasiga yo'naltirish
+        else:
+            return HttpResponse("Forma validatsiyadan o'tmagan")
+    else:
+        form = CourseUpdateForm(instance=course)
+
 
     ctx = {
-        'course': course
+        'course': course,
+        'form': form,
     }
 
     return render(request, 'course/course_edit.html', ctx)
 
-def course_delete_view(request):
-    ctx = {
+def course_delete_view(request,pk):
+    course = get_object_or_404(Course,pk=pk)
 
+    if request.method == "POST":
+        course.delete()
+        return redirect('courses')
+
+    ctx = {
+        'course': course
     }
     return render(request, 'course/course_delete.html', ctx)
 

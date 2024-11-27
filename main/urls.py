@@ -43,8 +43,8 @@ urlpatterns = [
     path('blogs',blogs_view,name='blogs'),
     #course
     path('courses',CoursesView.as_view(),name='courses'),
-    path('course-edit',course_update_view,name='course_edit'),
-    path('course-delete',course_delete_view,name='course_delete'),
+    path('course/<int:pk>/edit',course_update_view,name='course_edit'),
+    path('course/<int:pk>/delete',course_delete_view,name='course_delete'),
     path('course-students',course_students_view,name='course_students'),
     # registration
     path('signup',signup_view,name='signup'),

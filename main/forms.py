@@ -40,6 +40,12 @@ class CourseCreateForm(forms.ModelForm):
     teacher = forms.ModelChoiceField(queryset=Teacher.objects.all(), required=False)
 
 
+class CourseUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Course
+        fields = ['name', 'description', 'image', 'price', 'start_time', 'end_time', 'schedule_days']
+
+
 
 class UserSayForm(forms.ModelForm):
     class Meta:

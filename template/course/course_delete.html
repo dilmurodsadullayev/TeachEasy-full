@@ -3,5 +3,18 @@
 {% block title %} course delete {% endblock title %}
 {% block content %}
 
+<div class="container mt-5">
+    <h1 class="text-center">Kursni o'chirish</h1>
+    <p>Kursni o'chirishni tasdiqlang:</p>
+    <p><strong>Kurs nomi:</strong> {{ course.name }}</p>
+    <p><strong>Tavsifi:</strong> {{ course.description }}</p>
+    <p>Rostan ham ushbu kursni o'chirmoqchimisiz?</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <button class="btn btn-outline-danger" type="submit">Ha</button>
+        <a class="btn btn-outline-secondary" href="{% url 'courses' %}">Bekor qilish</a>
+    </form>
+</div>
 
 {% endblock content %}
