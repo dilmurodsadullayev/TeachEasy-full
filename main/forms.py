@@ -3,7 +3,7 @@ from markdown_it.rules_inline import image
 
 from main.models import Course,UserSay,CustomUser
 from django.contrib.auth.forms import UserCreationForm
-from .models import CustomUser,Course,Teacher,CourseStudent,Student
+from .models import CustomUser,Course,Teacher,CourseStudent,Student,CourseTask
 
 class CustomUserCreationForm(UserCreationForm):
     password1 = forms.CharField(
@@ -75,6 +75,16 @@ class StudentEditForm(forms.ModelForm):
             if not image.name.endswith(('.jpg', '.jpeg', '.png')):
                 raise ValidationError("Faqat JPG, JPEG yoki PNG formatidagi fayllarni yuklash mumkin.")
         return image
+
+
+#Group task 
+
+class GroupTaskForm(forms.ModelForm):
+    class Meta:
+        model = CourseTask
+        fields = ['course', 'task_name','definition','given_date','until_date','is_done']
+        # fields = '__all__'
+        
 
 class UserSayForm(forms.ModelForm):
     class Meta:

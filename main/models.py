@@ -132,9 +132,9 @@ class Mark(models.Model):
 
 
 class CourseTask(models.Model):
-    course = models.ForeignKey(CourseStudent, on_delete=models.CASCADE)
-    name = models.CharField(max_length=50)
-    description = models.TextField()
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    task_name = models.CharField(max_length=50)
+    definition = models.TextField()
     given_date = models.DateField()
     until_date = models.DateField()
     is_done = models.BooleanField(default=False)

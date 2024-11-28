@@ -59,12 +59,12 @@ urlpatterns = [
     path('course/<int:course_id>/student/<int:student_id>/detail',student_detail_view,name='student_detail'),
     path('course/<int:course_id>/student/<int:student_id>/edit',student_edit_view,name='student_edit'),
     path('course/<int:course_id>/student/<int:student_id>/delete',student_delete_view,name='student_delete'),
-    path('group-tasks',group_tasks_view,name='group_tasks'),
+    path('course/<int:course_id>/tasks',group_tasks_view,name='group_tasks'),
+    path('course/<int:course_id>/create/task',create_group_task_view,name="create_group_task"),
     #attendance
     path('attendances',attendances_view,name='attendances'),
     path('attendance-take',attendance_take_view,name='attendance_take'),
     path('attendance-update',attendance_update_view,name='attendance_update'),
-    path('create-group-task',create_group_task_view,name="create_group_task"),
     #teacher
     path('teacher-detail',teacher_detail_view,name="teacher_detail"),
     path('teacher-edit',teacher_edit_view,name='teacher_edit'),

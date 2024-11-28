@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect,render
-from .models import Course,UserSay,CustomUser,Student,Teacher,CourseStudent
-from .forms import CourseCreateForm,UserSayForm,CustomUserCreationForm,CourseUpdateForm,CourseStudentCreateForm,StudentEditForm
+from .models import Course,UserSay,CustomUser,Student,Teacher,CourseStudent,CourseTask
+from .forms import CourseCreateForm,UserSayForm,CustomUserCreationForm,CourseUpdateForm,CourseStudentCreateForm,StudentEditForm,GroupTaskForm
 from django.views.generic import View
 from django.contrib.auth import get_user_model,authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
@@ -328,8 +328,43 @@ def student_delete_view(request, course_id, student_id):
     return render(request, 'main/student_delete.html',ctx)
 
 
-def group_tasks_view(request):
-    return render(request, 'main/group_tasks.html')
+def group_tasks_view(request,course_id):
+    # course_stundent = get_object_or_404(CourseStudent,pk=course_id)
+    # course_student = CourseStudent.objects.get(course=course_id)
+    course = course_id
+
+    course_tasks = CourseTask.objects.filter(course=course_id)
+
+    ctx = {
+        'course': course,
+        'course_tasks': course_tasks
+    }
+    return render(request, 'course/group_tasks.html',ctx)
+
+
+def create_group_task_view(request, course_id):
+    # Fetch the course related to the student
+    course = course_id
+
+    if request.method == "POST":
+        form = GroupTaskForm(request.POST)
+        if form.is_valid():
+            group_task = form.save()
+            return redirect('group_tasks', course_id)  # Redirect to the list of group tasks
+        else:
+            # If form is invalid, print the errors for debugging
+            print(form.errors)
+    else:
+        form = GroupTaskForm()  # Initialize the form without request.POST for GET requests
+
+    ctx = {
+        # 'course_student': course_student,
+        'course': course,
+        'form': form,
+    }
+
+    return render(request, 'course/create_group_task.html', ctx)
+
 
 
 def attendances_view(request):
@@ -343,8 +378,6 @@ def attendance_take_view(request):
 def attendance_update_view(request):
     return render(request, 'attendances/attendance_update.html')
 
-def create_group_task_view(request):
-    return render(request,'main/create_group_task.html')
 
 
 #Teacher
