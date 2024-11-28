@@ -100,6 +100,7 @@ background: linear-gradient(0deg, rgba(255,255,255,1) 2%, rgba(0,212,255,1) 100%
 <div class="container mt-5">
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
+        {{ form|crispy }}
 
         <button type="submit" class="btn btn-outline-primary">Sign IN</button>
     </form>

@@ -13,7 +13,8 @@ from .views import (
     CoursesView,
     course_update_view,
     course_delete_view,
-    course_students_view,
+    course_student_view,
+    course_student_add_view,
     # registrations
     signup_view,
     sign_in_view,
@@ -45,14 +46,15 @@ urlpatterns = [
     path('courses',CoursesView.as_view(),name='courses'),
     path('course/<int:pk>/edit',course_update_view,name='course_edit'),
     path('course/<int:pk>/delete',course_delete_view,name='course_delete'),
-    path('course-students',course_students_view,name='course_students'),
+    path('course/<int:course_id>/students',course_student_view,name='course_students'),
+    path('course/<int:course_id>/student/add',course_student_add_view,name='course_student_add'),
     # registration
     path('signup',signup_view,name='signup'),
     path('login/',sign_in_view,name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
     
     #students
-    path('student-detail',student_detail_view,name='student_detail'),
+    path('course/<int:course_id>/student/<int:student_id>/detail',student_detail_view,name='student_detail'),
     path('group-tasks',group_tasks_view,name='group_tasks'),
     #attendance
     path('attendances',attendances_view,name='attendances'),

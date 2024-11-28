@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect,render
-from .models import Course,UserSay,CustomUser,Student,Teacher
-from .forms import CourseCreateForm,UserSayForm,CustomUserCreationForm,CourseUpdateForm
+from .models import Course,UserSay,CustomUser,Student,Teacher,CourseStudent
+from .forms import CourseCreateForm,UserSayForm,CustomUserCreationForm,CourseUpdateForm,CourseStudentCreateForm
 from django.views.generic import View
 from django.contrib.auth import get_user_model,authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
@@ -170,6 +170,45 @@ def course_delete_view(request,pk):
 
 
 
+def course_student_view(request, course_id):
+    course = get_object_or_404(Course, pk=course_id)
+
+    course_students = CourseStudent.objects.filter(course=course.id)
+
+    ctx = {
+        'course': course,
+        'course_students': course_students,
+    }
+    return render(request, 'course/course_students.html', ctx)
+
+
+def course_student_add_view(request, course_id):
+    course = get_object_or_404(Course, pk=course_id)
+
+    if request.method == 'POST':
+        form = CourseStudentCreateForm(request.POST)
+        if request.user.role == "TEACHER":  # Faqat o'qituvchilar qo'sha oladi
+            teacher = Teacher.objects.get(user=request.user.id)
+            if form.is_valid():
+                course_student = form.save(commit=False)
+                course_student.course = course  # Kursni belgilash
+                course_student.teacher = teacher  # O'qituvchini belgilash
+                course_student.save()  # Saqlash
+                return redirect('course_students', course_id=course.id)
+            else:
+                return HttpResponse(f"Forma validatsiyadan o'tmadi! Xatoliklar: {form.errors}")
+        else:
+            return HttpResponse("Guruhga talaba qo'shish uchun siz teacher bo'lishingiz kerak!")
+    else:
+        form = CourseStudentCreateForm()
+
+
+
+    ctx = {
+        'form': form,
+        'course': course,
+    }
+    return render(request, 'course/course_student_add.html', ctx)
 
 
 def gallery_view(request):
@@ -182,8 +221,6 @@ def single_view(request):
 def blogs_view(request):
     return render(request, 'main/blog.html')
 
-def course_students_view(request):
-    return render(request, 'course/course_students.html')
 
 def signup_view(request):
     if request.method == 'POST':
@@ -238,8 +275,13 @@ def logout_view(request):
     return redirect('index')
 
 
-def student_detail_view(request):
-    return render(request, 'main/student_detail.html')
+def student_detail_view(request,course_id,student_id):
+    course_student = CourseStudent.objects.get(course=course_id,student=student_id)
+
+    ctx = {
+        'course_student': course_student
+    }
+    return render(request, 'main/student_detail.html',ctx)
 
 def group_tasks_view(request):
     return render(request, 'main/group_tasks.html')
