@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect,render
 from .models import Course,UserSay,CustomUser,Student,Teacher,CourseStudent
-from .forms import CourseCreateForm,UserSayForm,CustomUserCreationForm,CourseUpdateForm,CourseStudentCreateForm
+from .forms import CourseCreateForm,UserSayForm,CustomUserCreationForm,CourseUpdateForm,CourseStudentCreateForm,StudentEditForm
 from django.views.generic import View
 from django.contrib.auth import get_user_model,authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
@@ -276,12 +276,57 @@ def logout_view(request):
 
 
 def student_detail_view(request,course_id,student_id):
+        
     course_student = CourseStudent.objects.get(course=course_id,student=student_id)
+    student = course_student.student.user
 
     ctx = {
-        'course_student': course_student
+        'course_student': course_student,
+        'student': student
     }
     return render(request, 'main/student_detail.html',ctx)
+
+
+def student_edit_view(request, course_id, student_id):
+    course_student = CourseStudent.objects.get(course=course_id, student=student_id)
+    student = course_student.student.user
+
+    if request.method == "POST":
+        form = StudentEditForm(request.POST, request.FILES, instance=student)
+        if form.is_valid():
+            form.save()
+            return redirect('student_detail', course_id=course_id, student_id=student_id)
+    else:
+        form = StudentEditForm(instance=student)
+
+    # Har bir sharoit uchun HttpResponse qaytarilishi ta'minlanadi
+    ctx = {
+        'form': form,
+        'course_student': course_student,
+        'student': student,
+    }
+    return render(request, 'main/student_edit.html', ctx)
+
+
+def student_delete_view(request, course_id, student_id):
+    course_student = CourseStudent.objects.get(course=course_id, student=student_id)
+    student = course_student.student.user
+
+    if request.method == "POST":
+        if request.user.role == "TEACHER" or request.user.role == "ADMIN":
+            student.delete()
+            return redirect('courses')
+
+        else:
+            return HttpResponse("Sizni rolingiz teacher yoki admin bo'lishi kerak")
+
+    ctx = {
+        'course_student': course_student,
+        'student': student,
+    }   
+
+    return render(request, 'main/student_delete.html',ctx)
+
 
 def group_tasks_view(request):
     return render(request, 'main/group_tasks.html')

@@ -58,6 +58,24 @@ class CourseStudentCreateForm(forms.ModelForm):
     )
 
 
+
+class StudentEditForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'first_name', 'last_name', 'birth_date', 'address', 'phone_number', 'image','email']
+
+    def clean_image(self):
+        image = self.cleaned_data.get('image')
+        if image:
+            # Check file size (limit to 2MB)
+            if image.size > 2 * 1024 * 1024:
+                raise ValidationError("Rasm hajmi 2MB dan oshmasligi kerak.")
+            
+            # Check file format (only allow .jpg, .jpeg, .png)
+            if not image.name.endswith(('.jpg', '.jpeg', '.png')):
+                raise ValidationError("Faqat JPG, JPEG yoki PNG formatidagi fayllarni yuklash mumkin.")
+        return image
+
 class UserSayForm(forms.ModelForm):
     class Meta:
         model = UserSay

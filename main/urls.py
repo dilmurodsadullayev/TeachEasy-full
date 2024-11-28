@@ -20,6 +20,8 @@ from .views import (
     sign_in_view,
 #students
     student_detail_view,
+    student_edit_view,
+    student_delete_view,
     group_tasks_view,
     attendances_view,
     attendance_take_view,
@@ -55,6 +57,8 @@ urlpatterns = [
     
     #students
     path('course/<int:course_id>/student/<int:student_id>/detail',student_detail_view,name='student_detail'),
+    path('course/<int:course_id>/student/<int:student_id>/edit',student_edit_view,name='student_edit'),
+    path('course/<int:course_id>/student/<int:student_id>/delete',student_delete_view,name='student_delete'),
     path('group-tasks',group_tasks_view,name='group_tasks'),
     #attendance
     path('attendances',attendances_view,name='attendances'),
