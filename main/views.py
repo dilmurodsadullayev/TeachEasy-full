@@ -542,13 +542,63 @@ class AttendanceUpdateView(View):
 def teacher_edit_view(request):
     return render(request,'teacher/teacher_edit.html')
 
-
+@login_required
 def teachers_view(request):
-    return render(request, 'teacher/teachers.html')
+    # only_admin = request.user.role == 'ADMIN'
+    user = request.user
+    if user.role == "ADMIN":
+        
+        teachers = Teacher.objects.all()
+        
+        teacher_courses = []
+        for teacher in teachers:
+            course = Course.objects.filter(teacher=teacher)
+            teacher_courses.append(
+                {
+                    'teacher': teacher,
+                    'course': course
+                }
+            )
+        # print(teacher_courses)
+
+        
 
 
-def teacher_detail_view(request):
-    return render(request,'teacher/teacher_detail.html')
+        ctx = {
+        'teachers': teachers,
+        # 'course': courses,
+        'teacher_courses': teacher_courses
+        }
+
+        return render(request, 'teacher/teachers.html',ctx)
+    elif user.role == "TEACHER":
+        teacher = Teacher.objects.get(user=user.id)
+        courses = Course.objects.filter(teacher=teacher)
+        
+
+
+
+        # teachers = Teacher.objects.all()
+        ctx = {
+            'teacher': teacher,
+            'courses': courses
+        }
+
+        return render(request, 'teacher/teachers.html',ctx)
+
+
+
+
+def teacher_detail_view(request,teacher_id):
+    teacher = get_object_or_404(Teacher,id=teacher_id)
+
+    courses = Course.objects.filter(teacher=teacher)
+
+    ctx = {
+        'teacher': teacher,
+        'courses': courses
+    }
+    return render(request,'teacher/teacher_detail.html',ctx)
 
 
 def profile_view(request):

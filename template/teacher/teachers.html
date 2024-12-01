@@ -94,11 +94,19 @@
         </div>
         <div class="row list-of-teacher">
 
+
+            {% if request.user.id == teacher.user.id %}
             <div class="col-md-6 col-lg-3 text-center team mb-5">
                 <div class="position-relative overflow-hidden mb-4" style="border-radius: 100%;">
-                    <a href="{% url 'teacher_detail' %}" class="text-decoration-none">
-                        <img class="img-fluid w-100" src="{% static 'img/team-1.jpg' %}" alt="">
+                    {% if teacher.user.image %}
+                    <a href="{% url 'teacher_detail' teacher.id %}" class="text-decoration-none">
+                        <img class="img-fluid" style="width: 100px;" src="{{ teacher.user.image.url }}" alt="">
                     </a>
+                    {% else %}
+                    <a href="{% url 'teacher_detail' teacher.id %}" class="text-decoration-none">
+                        <img class="img-fluid" style="width: 100px;" src="{% static 'img/user.png' %}" alt="">
+                    </a>
+                    {% endif %}
                     <div
                         class="team-social d-flex align-items-center justify-content-center w-100 h-100 position-absolute">
                         <a class="btn btn-outline-light text-center mr-2 px-0" style="width: 38px; height: 38px;"
@@ -109,14 +117,28 @@
                                 class="fab fa-linkedin-in"></i></a>
                     </div>
                 </div>
-                <h4>Julia Smith</h4>
-                <i>Music Teacher <button class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal1"><i
-                            class="bi bi-pencil-fill"></i></button></i>
-            </div>
+                <h4>{{ teacher.user.first_name }} {{ teacher.user.last_name }}</h4>
+                <i>
+                    {% for course in courses %}
+                    {{ course.name }}<button class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal1"><i
+                            class="bi bi-pencil-fill"></i></button>
+                    {% endfor %}
+                </i>
 
+            </div>
+            {% elif request.user.role == "ADMIN" %}
+            {% for teacher in teacher_courses %}
             <div class="col-md-6 col-lg-3 text-center team mb-5">
                 <div class="position-relative overflow-hidden mb-4" style="border-radius: 100%;">
-                    <img class="img-fluid w-100" src="{% static 'img/team-2.jpg' %}" alt="">
+                    {% if teacher.teacher.user.image %}
+                    <a href="{% url 'teacher_detail' teacher.teacher.id %}" class="text-decoration-none">
+                        <img class="img-fluid" style="width: 100px;" src="{{ teacher.teacher.user.image.url }}" alt="">
+                    </a>
+                    {% else %}
+                    <a href="{% url 'teacher_detail' teacher.teacher.id %}" class="text-decoration-none">
+                        <img class="img-fluid" style="width: 100px;" src="{% static 'img/user.png' %}" alt="">
+                    </a>
+                    {% endif %}
                     <div
                         class="team-social d-flex align-items-center justify-content-center w-100 h-100 position-absolute">
                         <a class="btn btn-outline-light text-center mr-2 px-0" style="width: 38px; height: 38px;"
@@ -127,28 +149,21 @@
                                 class="fab fa-linkedin-in"></i></a>
                     </div>
                 </div>
-                <h4>Jhon Doe</h4>
-                <i>Language Teacher <button class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal2"><i
-                            class="bi bi-pencil-fill"></i></button></i>
+                <h4>{{ teacher.teacher.user.first_name }} {{ teacher.teacher.user.last_name }}</h4>
+                {% for course in teacher.course %}
+                {{ course }}<button class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal1"><i
+                        class="bi bi-pencil-fill"></i></button>
+                {% endfor %}
             </div>
+            {% endfor %}
+            {% else %}
+            <h2 class="text-center">
+                Sizni rolingiz student shuni uchun sizga nimani ko'rsatishni o'ylab ko'raman
+            </h2>
 
-            <div class="col-md-6 col-lg-3 text-center team mb-5">
-                <div class="position-relative overflow-hidden mb-4" style="border-radius: 100%;">
-                    <img class="img-fluid w-100" src="{% static 'img/team-3.jpg' %}" alt="">
-                    <div
-                        class="team-social d-flex align-items-center justify-content-center w-100 h-100 position-absolute">
-                        <a class="btn btn-outline-light text-center mr-2 px-0" style="width: 38px; height: 38px;"
-                            href="#"><i class="fab fa-twitter"></i></a>
-                        <a class="btn btn-outline-light text-center mr-2 px-0" style="width: 38px; height: 38px;"
-                            href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a class="btn btn-outline-light text-center px-0" style="width: 38px; height: 38px;" href="#"><i
-                                class="fab fa-linkedin-in"></i></a>
-                    </div>
-                </div>
-                <h4>Mollie Ross</h4>
-                <i>Dance Teacher <button class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal3"><i
-                            class="bi bi-pencil-fill"></i></button></i>
-            </div>
+            {% endif %}
+
+
         </div>
     </div>
 </div>

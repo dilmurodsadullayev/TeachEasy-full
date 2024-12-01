@@ -66,7 +66,7 @@ urlpatterns = [
     path('course/<int:course_id>/attendance-take',AttendanceTakeView.as_view(),name='attendance_take'),
     path('course/<int:course_id>/attendance/<int:attendance_id>/update',AttendanceUpdateView.as_view(),name='attendance_update'),
     #teacher
-    path('teacher-detail',teacher_detail_view,name="teacher_detail"),
+    path('teacher/<int:teacher_id>/detail',teacher_detail_view,name="teacher_detail"),
     path('teacher-edit',teacher_edit_view,name='teacher_edit'),
     #profile
     path('profile',profile_view,name='profile'),

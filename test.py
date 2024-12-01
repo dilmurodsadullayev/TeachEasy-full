@@ -1,18 +1,14 @@
-s_w_m = [
+data = [
     {
-        'student': 'padme',
-        'marks': [
-            True, False
-            ]
-     },
+        'teacher': 'anakin',
+         'course': 'Dasturlash'
+         },
     {
-        'student': 'padme', 
-        'marks': [
-            True,False
-             ]
-    }
- ]
+        'teacher': 'duck', 
+        'course': 'English'
+        }
+        
+]
 
-
-for sw in s_w_m:
-        print(s_w_m[0]['student'])
+for da in data:
+    print(da)
