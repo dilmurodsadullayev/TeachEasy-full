@@ -88,8 +88,3 @@ class UserSayForm(forms.ModelForm):
         return instance
     
 
-
-class AttendanceTakeForm(forms.ModelForm):
-    class Meta:
-        model = Mark
-        fields = ['student', 'attendance', 'is_attended']

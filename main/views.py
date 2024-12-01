@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect,render
 from .models import Course,UserSay,CustomUser,Student,Teacher,CourseStudent,CourseTask,Attendance,Mark
-from .forms import CourseCreateForm,UserSayForm,CustomUserCreationForm,CourseUpdateForm,CourseStudentCreateForm,StudentEditForm,GroupTaskForm,AttendanceTakeForm
+from .forms import CourseCreateForm,UserSayForm,CustomUserCreationForm,CourseUpdateForm,CourseStudentCreateForm,StudentEditForm,GroupTaskForm
 from django.views.generic import View
 from django.contrib.auth import get_user_model,authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
@@ -186,7 +186,6 @@ def course_student_view(request, course_id):
 
 def course_student_add_view(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
-
     if request.method == 'POST':
         form = CourseStudentCreateForm(request.POST)
         if request.user.role == "TEACHER":  # Faqat o'qituvchilar qo'sha oladi
@@ -374,10 +373,11 @@ def attendances_view(request,course_id):
     course = get_object_or_404(Course, id=course_id)
     course_students = CourseStudent.objects.filter(course=course_id)
     attendances = Attendance.objects.filter(course=course_id)
+    attendance  = Attendance.objects.filter(course=course_id).first()
     marks = Mark.objects.filter(attendance__in=attendances)
 
-    is_att_taken = Attendance.objects.filter(date=today,course=course).exists()
-    date_list = Attendance.objects.order_by('date')
+    is_att_taken = Attendance.objects.filter(date=today,course=course_id).exists()
+    date_list = Attendance.objects.order_by('-date')
     date_paginator = Paginator(date_list, 2)  # Show 5 dates per page
     date_page = request.GET.get('date_page')
 
@@ -405,7 +405,7 @@ def attendances_view(request,course_id):
             
         
     # return HttpResponse(students_with_marks)
-    print(students_with_marks)
+    # print(students_with_marks)
 
     paginator = Paginator(students_with_marks, 14)  # Show 10 students per page
     page = request.GET.get('page')
@@ -425,7 +425,9 @@ def attendances_view(request,course_id):
         'date_paginator': date_paginator,
         'date_page_obj': attendances_paginated,
         'paginated_dates': paginated_dates,
-        'today': today
+        'today': today,
+        'attendance': attendance,
+        'is_att_taken': is_att_taken,
     }
 
     return render(request, 'attendances/attendances.html',ctx)
@@ -435,6 +437,10 @@ def attendances_view(request,course_id):
 # attendance
 class AttendanceTakeView(View):
     def post(self,request,course_id):
+        today = timezone.now().date()
+        course = get_object_or_404(Course, id=course_id)
+        course_students = CourseStudent.objects.filter(course=course)
+
         if request.method == "POST":
             today = timezone.now().date()
             course = get_object_or_404(Course, id=course_id)
@@ -487,9 +493,48 @@ class AttendanceTakeView(View):
 
         return render(request, 'attendances/attendance_take.html',ctx)
 
+class AttendanceUpdateView(View):
+    def get(self,request,course_id,attendance_id):
+        course_id = course_id
+        attendance = Attendance.objects.get(id=attendance_id)
+        today = datetime.now().date()
+        marks = Mark.objects.filter(attendance=attendance)
 
-def attendance_update_view(request):
-    return render(request, 'attendances/attendance_update.html')
+        ctx = {
+            'attendance': attendance,
+            'marks': marks,
+            'course_id': course_id
+        }
+
+        return render(request, 'attendances/attendance_update.html',ctx)
+
+
+    def post(self,request,course_id,attendance_id):
+        course_id = course_id
+        attendance = Attendance.objects.get(id=attendance_id)
+        marks = Mark.objects.filter(attendance=attendance)
+        today = datetime.now().date()
+
+        if attendance.date == today:
+            if request.method == "POST":
+                for mark in marks:
+                    is_attended_input = request.POST.get(f"is_attended_{mark.id}")
+                    mark.is_attended = is_attended_input == 'on'
+                Mark.objects.bulk_update(marks,['is_attended'])
+                return redirect('attendances' ,course_id=course_id)
+
+
+            
+            ctx = {
+                'attendance': attendance,
+                'marks': marks,
+                'course_id': course_id
+            }
+
+            return render(request, 'attendances/attendance_update.html',ctx)
+        else:
+            return HttpResponse("Faqat bugungi sanadagi davomaladlarni yangilash mumkin")
+
 
 
 

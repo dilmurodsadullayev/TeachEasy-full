@@ -26,15 +26,15 @@
         {% endif %}
 
         {% for num in date_page_obj.paginator.page_range %}
-        {% if num == date_page_obj.number %}
-        <li class="page-item active" aria-current="page">
-          <span class="page-link">{{ num }} <span class="sr-only">(current)</span></span>
-        </li>
-        {% else %}
-        <li class="page-item">
-          <a class="page-link" href="?date_page={{ num }}">{{ num }}</a>
-        </li>
-        {% endif %}
+          {% if num == date_page_obj.number %}
+          <li class="page-item active" aria-current="page">
+            <span class="page-link">{{ num }} <span class="sr-only">(current)</span></span>
+          </li>
+          {% else %}
+          <li class="page-item">
+            <a class="page-link" href="?date_page={{ num }}">{{ num }}</a>
+          </li>
+          {% endif %}
         {% endfor %}
 
         {% if date_page_obj.has_next %}
@@ -61,7 +61,8 @@
         {% for attendance in paginated_dates %}
         <th scope="col">
           {% if attendance.date == today %}
-          <a href="{% url 'attendance_update' %}">{{ attendance.date }}</a>
+          <a href="{% url 'attendance_update' course_id=course.id attendance_id=attendance.id %}">
+            {{ attendance.date}}</a>
           {% else %}
           {{ attendance.date }}
           {% endif %}
@@ -91,10 +92,10 @@
   {% endif %}
   <div class="d-flex justify-content-start mt-3">
     {% if is_att_taken %}
-    <a href="{% url 'attendance_take' course.id %}"><button type="button"
-        class="btn btn-outline-primary mr-1">Attendance take</button></a>
+      <a><button type="button" class="btn btn-outline-danger mr-1">Not Attendance take</button></a>
     {% else %}
-    <a><button type="button" class="btn btn-outline-danger mr-1">Not Attendance take</button></a>
+    <a href="{% url 'attendance_take' course.id %}"><button type="button"
+          class="btn btn-outline-primary mr-1">Attendance take</button></a>
     {% endif %}
   </div>
 
