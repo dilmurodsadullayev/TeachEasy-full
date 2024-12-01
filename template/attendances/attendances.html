@@ -10,46 +10,92 @@
     <h2 class="mb-3">Matematika guruhi Davomadi</h2>
 
   </div>
+  <div class="pagination d-flex justify-content-center">
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        {% if date_page_obj.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?date_page={{ date_page_obj.previous_page_number }}" aria-label="Previous">
+            Previous
+          </a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+          <span class="page-link">Previous</span>
+        </li>
+        {% endif %}
 
+        {% for num in date_page_obj.paginator.page_range %}
+        {% if num == date_page_obj.number %}
+        <li class="page-item active" aria-current="page">
+          <span class="page-link">{{ num }} <span class="sr-only">(current)</span></span>
+        </li>
+        {% else %}
+        <li class="page-item">
+          <a class="page-link" href="?date_page={{ num }}">{{ num }}</a>
+        </li>
+        {% endif %}
+        {% endfor %}
 
+        {% if date_page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?date_page={{ date_page_obj.next_page_number }}" aria-label="Next">
+            Next
+          </a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+          <span class="page-link">Next</span>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+
+  {% if marks %}
   <table class="table">
     <thead>
       <tr>
         <th scope="col">ID</th>
         <th scope="col">Full Name</th>
-        <th scope="col"><a href="{% url 'attendance_update' %}">2024-08-11</a></th>
-        <th scope="col"><a href="{% url 'attendance_update' %}">2024-08-12</a></th>
+        {% for attendance in paginated_dates %}
+        <th scope="col">
+          {% if attendance.date == today %}
+          <a href="{% url 'attendance_update' %}">{{ attendance.date }}</a>
+          {% else %}
+          {{ attendance.date }}
+          {% endif %}
+        </th>
+        {% endfor %}
       </tr>
     </thead>
     <tbody class="table-group-divider">
+      {% for student_with_mark in students_with_marks %}
       <tr>
-        <th scope="row">1</th>
-        <td>Oktam</td>
-        <td><button class="btn btn-danger">no</button></td>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{ student_with_mark.student.user.first_name }} {{ student_with_mark.student.user.last_name }}</td>
+        {% for mark in student_with_mark.marks %}
+        {% if mark.is_attended %}
         <td><button class="btn btn-success">yes</button></td>
-      </tr>
-      <tr>
-        <th scope="row">2</th>
-        <td>Jacob</td>
-        <td><button class="btn btn-success">yes</button></td>
+        {% else %}
         <td><button class="btn btn-danger">no</button></td>
+        {% endif %}
+        {% endfor %}
       </tr>
+      {% endfor %}
     </tbody>
   </table>
 
-  <div class="d-flex justify-content-center mt-5">
-    <nav aria-label="Page navigation example">
-      <ul class="pagination">
-        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-        <li class="page-item"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item"><a class="page-link" href="#">Next</a></li>
-      </ul>
-    </nav>
-  </div>
+  {% else %}
+  <h2 class="text-center">Davomadlar mavjud emas</h2>
+  {% endif %}
   <div class="d-flex justify-content-start mt-3">
-    <a href="{% url 'attendance_take' %}"><button type="button" class="btn btn-outline-primary mr-1">Attendance take</button></a>
+    {% if is_att_taken %}
+    <a href="{% url 'attendance_take' course.id %}"><button type="button"
+        class="btn btn-outline-primary mr-1">Attendance take</button></a>
+    {% else %}
+    <a><button type="button" class="btn btn-outline-danger mr-1">Not Attendance take</button></a>
+    {% endif %}
   </div>
 
 </div>

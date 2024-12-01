@@ -1,4 +1,18 @@
-user_data = {'email': 'oktam@gmail.com', 'password': '1234'}
+s_w_m = [
+    {
+        'student': 'padme',
+        'marks': [
+            True, False
+            ]
+     },
+    {
+        'student': 'padme', 
+        'marks': [
+            True,False
+             ]
+    }
+ ]
 
-print(f" bu emaili {user_data['email']}")
-print(f" bu passwordi {user_data['password']}")
+
+for sw in s_w_m:
+        print(s_w_m[0]['student'])

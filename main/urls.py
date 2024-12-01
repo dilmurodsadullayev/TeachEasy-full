@@ -24,7 +24,7 @@ from .views import (
     student_delete_view,
     group_tasks_view,
     attendances_view,
-    attendance_take_view,
+    AttendanceTakeView,
     attendance_update_view,
     create_group_task_view,
 #teachers
@@ -62,8 +62,8 @@ urlpatterns = [
     path('course/<int:course_id>/tasks',group_tasks_view,name='group_tasks'),
     path('course/<int:course_id>/create/task',create_group_task_view,name="create_group_task"),
     #attendance
-    path('attendances',attendances_view,name='attendances'),
-    path('attendance-take',attendance_take_view,name='attendance_take'),
+    path('course/<int:course_id>/attendances',attendances_view,name='attendances'),
+    path('course/<int:course_id>/attendance-take',AttendanceTakeView.as_view(),name='attendance_take'),
     path('attendance-update',attendance_update_view,name='attendance_update'),
     #teacher
     path('teacher-detail',teacher_detail_view,name="teacher_detail"),

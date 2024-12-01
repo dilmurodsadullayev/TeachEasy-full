@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect,render
-from .models import Course,UserSay,CustomUser,Student,Teacher,CourseStudent,CourseTask
-from .forms import CourseCreateForm,UserSayForm,CustomUserCreationForm,CourseUpdateForm,CourseStudentCreateForm,StudentEditForm,GroupTaskForm
+from .models import Course,UserSay,CustomUser,Student,Teacher,CourseStudent,CourseTask,Attendance,Mark
+from .forms import CourseCreateForm,UserSayForm,CustomUserCreationForm,CourseUpdateForm,CourseStudentCreateForm,StudentEditForm,GroupTaskForm,AttendanceTakeForm
 from django.views.generic import View
 from django.contrib.auth import get_user_model,authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
@@ -9,7 +9,9 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.http import HttpResponse
-
+from datetime import datetime
+from django.utils import timezone
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 # Create your views here
@@ -367,12 +369,123 @@ def create_group_task_view(request, course_id):
 
 
 
-def attendances_view(request):
-    return render(request, 'attendances/attendances.html')
+def attendances_view(request,course_id):
+    today = timezone.now().date()
+    course = get_object_or_404(Course, id=course_id)
+    course_students = CourseStudent.objects.filter(course=course_id)
+    attendances = Attendance.objects.filter(course=course_id)
+    marks = Mark.objects.filter(attendance__in=attendances)
+
+    is_att_taken = Attendance.objects.filter(date=today,course=course).exists()
+    date_list = Attendance.objects.order_by('date')
+    date_paginator = Paginator(date_list, 2)  # Show 5 dates per page
+    date_page = request.GET.get('date_page')
+
+    try:
+        attendances_paginated = date_paginator.page(date_page)
+    except PageNotAnInteger:
+        attendances_paginated = date_paginator.page(1)
+    except EmptyPage:
+        attendances_paginated = date_paginator.page(date_paginator.num_pages)
+
+    paginated_dates = attendances_paginated.object_list
+
+
+    students_with_marks = []
+    
+    for course_student in course_students:
+        marks_for_paginated_dates = [
+            Mark.objects.filter(attendance=attendance, student=course_student.student).first()
+            for attendance in paginated_dates
+        ]
+        students_with_marks.append({
+            'student': course_student.student,
+            'marks': marks_for_paginated_dates
+        })
+            
+        
+    # return HttpResponse(students_with_marks)
+    print(students_with_marks)
+
+    paginator = Paginator(students_with_marks, 14)  # Show 10 students per page
+    page = request.GET.get('page')
+    try:
+        students_with_marks_paginated = paginator.page(page)
+    except PageNotAnInteger:
+        students_with_marks_paginated = paginator.page(1)
+    except EmptyPage:
+        students_with_marks_paginated = paginator.page(paginator.num_pages)
+        
+    ctx = {
+        'course': course,
+        'course_students': course_students,
+        'attendances': attendances,
+        'marks': marks,
+        'students_with_marks': students_with_marks,
+        'date_paginator': date_paginator,
+        'date_page_obj': attendances_paginated,
+        'paginated_dates': paginated_dates,
+        'today': today
+    }
+
+    return render(request, 'attendances/attendances.html',ctx)
+
+
 
 # attendance
-def attendance_take_view(request):
-    return render(request, 'attendances/attendance_take.html')
+class AttendanceTakeView(View):
+    def post(self,request,course_id):
+        if request.method == "POST":
+            today = timezone.now().date()
+            course = get_object_or_404(Course, id=course_id)
+            course_students = CourseStudent.objects.filter(course=course)
+            print(request.method)
+
+            attendance = Attendance.objects.create(course=course, date=today) 
+            for course_student in course_students:
+                print(course_student.student.id)
+                print(course_student.student.user.username)
+                attendance_key = f"attended_{course_student.student.id}"
+                is_attended = request.POST.get(attendance_key) == 'on'
+                print(f"Attendance key: {attendance_key}, Is attended: {is_attended}")
+
+
+                mark = Mark.objects.create(
+                    student = course_student.student,
+                    attendance = attendance,
+                    is_attended = is_attended
+                )
+                print(f"Mark created: {mark}")
+            return redirect('attendances', course.id)
+
+        ctx = {
+            'course': course,
+            # 'attendance': attendance
+            'course_students': course_students,
+            'today': today,
+
+        }
+
+
+        return render(request, 'attendances/attendance_take.html',ctx)
+
+    def get(self,request,course_id):
+        today = timezone.now().date()
+        course = get_object_or_404(Course, id=course_id)
+        course_students = CourseStudent.objects.filter(course=course)
+        print(request.method)
+
+        
+
+        ctx = {
+            'course': course,
+            'course_students': course_students,
+            'today': today,
+
+        }
+
+
+        return render(request, 'attendances/attendance_take.html',ctx)
 
 
 def attendance_update_view(request):

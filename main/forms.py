@@ -1,9 +1,7 @@
 from django import forms
 from markdown_it.rules_inline import image
-
-from main.models import Course,UserSay,CustomUser
 from django.contrib.auth.forms import UserCreationForm
-from .models import CustomUser,Course,Teacher,CourseStudent,Student,CourseTask
+from .models import CustomUser,Course,Teacher,CourseStudent,Student,CourseTask,UserSay,Mark
 
 class CustomUserCreationForm(UserCreationForm):
     password1 = forms.CharField(
@@ -64,17 +62,7 @@ class StudentEditForm(forms.ModelForm):
         model = CustomUser
         fields = ['username', 'first_name', 'last_name', 'birth_date', 'address', 'phone_number', 'image','email']
 
-    def clean_image(self):
-        image = self.cleaned_data.get('image')
-        if image:
-            # Check file size (limit to 2MB)
-            if image.size > 2 * 1024 * 1024:
-                raise ValidationError("Rasm hajmi 2MB dan oshmasligi kerak.")
-            
-            # Check file format (only allow .jpg, .jpeg, .png)
-            if not image.name.endswith(('.jpg', '.jpeg', '.png')):
-                raise ValidationError("Faqat JPG, JPEG yoki PNG formatidagi fayllarni yuklash mumkin.")
-        return image
+    
 
 
 #Group task 
@@ -99,3 +87,9 @@ class UserSayForm(forms.ModelForm):
             instance.save()
         return instance
     
+
+
+class AttendanceTakeForm(forms.ModelForm):
+    class Meta:
+        model = Mark
+        fields = ['student', 'attendance', 'is_attended']

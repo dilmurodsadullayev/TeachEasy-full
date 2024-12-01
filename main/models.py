@@ -112,7 +112,7 @@ class CourseStudent(models.Model):
 
 
 class Attendance(models.Model):
-    course = models.ForeignKey(CourseStudent, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
     date = models.DateField()
 
     def __str__(self):
@@ -120,7 +120,7 @@ class Attendance(models.Model):
 
 
 class Mark(models.Model):
-    student = models.ForeignKey(CourseStudent, on_delete=models.CASCADE, related_name='marks')
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='marks')
     attendance = models.ForeignKey(Attendance, on_delete=models.CASCADE)
     is_attended = models.BooleanField(default=False)  # is_attendent o'rniga is_attended
 
