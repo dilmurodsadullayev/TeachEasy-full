@@ -36,3 +36,10 @@
         margin-right: 20%;
     }
 }
+
+.header-start {
+    height: 650px;
+    background-image: url('/static/img/header1.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}

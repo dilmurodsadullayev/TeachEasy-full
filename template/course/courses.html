@@ -222,9 +222,12 @@
             <p class="section-title px-5"><span class="px-2">Popular Classes</span></p>
             <h1 class="mb-4">Classes for Your Kids</h1>
             <div class="d-flex justify-content-end mb-3">
+                {% if request.user.role == "ADMIN" or request.user.role == "TEACHER" %}
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     Create course
                 </button>
+                {% endif %}
+
             </div>
         </div>
         <div class="row">

@@ -372,12 +372,12 @@ def attendances_view(request,course_id):
     today = timezone.now().date()
     course = get_object_or_404(Course, id=course_id)
     course_students = CourseStudent.objects.filter(course=course_id)
-    attendances = Attendance.objects.filter(course=course_id)
-    attendance  = Attendance.objects.filter(course=course_id).first()
+    attendances = Attendance.objects.filter(course=course_id).all()
+    # attendance  = Attendance.objects.filter(course=course_id).first()
     marks = Mark.objects.filter(attendance__in=attendances)
 
     is_att_taken = Attendance.objects.filter(date=today,course=course_id).exists()
-    date_list = Attendance.objects.order_by('-date')
+    date_list = Attendance.objects.filter(course=course_id).order_by('date')
     date_paginator = Paginator(date_list, 2)  # Show 5 dates per page
     date_page = request.GET.get('date_page')
 
@@ -394,18 +394,23 @@ def attendances_view(request,course_id):
     students_with_marks = []
     
     for course_student in course_students:
-        marks_for_paginated_dates = [
-            Mark.objects.filter(attendance=attendance, student=course_student.student).first()
-            for attendance in paginated_dates
-        ]
-        students_with_marks.append({
-            'student': course_student.student,
-            'marks': marks_for_paginated_dates
-        })
-            
+        for attendance in attendances:
+            print(attendance)
+            marks_for_paginated_dates = [
+                Mark.objects.filter(attendance=attendance, student=course_student.student).first()
+                for attendance in paginated_dates
+            ]
+            try:
+                students_with_marks.append({
+                    'student': course_student.student,
+                    'marks': marks_for_paginated_dates
+                })
+            except:
+                pass
+                
         
     # return HttpResponse(students_with_marks)
-    # print(students_with_marks)
+    print(students_with_marks)
 
     paginator = Paginator(students_with_marks, 14)  # Show 10 students per page
     page = request.GET.get('page')
@@ -426,7 +431,7 @@ def attendances_view(request,course_id):
         'date_page_obj': attendances_paginated,
         'paginated_dates': paginated_dates,
         'today': today,
-        'attendance': attendance,
+        # 'attendance': attendance,
         'is_att_taken': is_att_taken,
     }
 
