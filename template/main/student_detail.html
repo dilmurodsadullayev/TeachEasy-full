@@ -22,7 +22,7 @@
         {% if course_student.student.user.first_name %}
         <h1 class="d-inline">{{ course_student.student.user.first_name }}</h1>
         {% else %}
-        <h1 class="d-inline">No name</h1>
+        <h1 class="d-inline">No name </h1>
         {% endif %}
         <a class="btn mb-2 ml-2 btn-primary"
           href="{% url 'student_edit' course_id=course_student.course.id student_id=course_student.student.id %}">Edit</a>

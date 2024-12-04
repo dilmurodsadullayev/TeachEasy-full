@@ -8,11 +8,11 @@
 
 <!-- Header Start -->
 <div class="container-fluid header-start px-0 mb-5">
-    <div class="row align-items-center px-3 d-flex justify-content-center flex-column"
-        style="backdrop-filter: blur(5px); height: 650px;">
+    <div class="row px-3 m-0" style="backdrop-filter: blur(5px); height: 650px;">
 
         <div class="mb-2 mt-5 d-flex justify-content-center">
-            <h1 class="text-black">Xush kelibsiz, {{ request.user.username }} <br>
+            <h1 class="text-white" style="font-size: 50px; letter-spacing: 2px;">Xush kelibsiz,
+                {{request.user.username}} <br>
                 TeachEasy bilan qoling</h1>
         </div>
 
@@ -45,8 +45,9 @@
                 </div>
                 <div class="d-flex align-items-center">
                     {% if user_say.user.image %}
-                    <img class="rounded-circle" src="{{ user_say.user.image.url }}" style="width: 70px; height: 70px;"
-                        alt="Not Image">
+                    <div style="overflow: hidden; border-radius: 50px;">
+                        <img class="rounded-circle" src="{{ user_say.user.image.url }}" alt="Not Image">
+                    </div>
                     {% else %}
                     <img class="rounded-circle" src="{% static 'img/user.png' %}" style="width: 70px; height: 70px;"
                         alt="Not Image">

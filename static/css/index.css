@@ -39,7 +39,7 @@
 
 .header-start {
     height: 650px;
-    background-image: url('/static/img/header1.jpg');
+    background-image: url('/static/img/header.jpg');
     background-repeat: no-repeat;
     background-size: cover;
 }
