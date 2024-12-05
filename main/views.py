@@ -400,13 +400,13 @@ def attendances_view(request,course_id):
                 Mark.objects.filter(attendance=attendance, student=course_student.student).first()
                 for attendance in paginated_dates
             ]
-            try:
-                students_with_marks.append({
-                    'student': course_student.student,
-                    'marks': marks_for_paginated_dates
-                })
-            except:
-                pass
+        try:
+            students_with_marks.append({
+                'student': course_student.student,
+                'marks': marks_for_paginated_dates
+            })
+        except:
+            pass
                 
         
     # return HttpResponse(students_with_marks)
