@@ -71,15 +71,14 @@
 
     <div class="mb-3">
       <label class="form-check-label mb-4" for="btncheck3">Completed</label>
-      <input type="checkbox" class="form-check-input" name="is_done" id="btncheck3" {% if form.is_done.value %}checked{%
-        endif %}>
+      <input type="checkbox" class="form-check-input" name="is_done" id="btncheck3"
+             {% if form.is_done.value%}checked{%endif %}>
       {% if form.is_done.errors %}
       <div class="text-danger">
         {% for error in form.is_done.errors %}
         <p>{{ error }}</p>
         {% endfor %}
       </div>
-      {% endif %}
       {% endif %}
     </div>
 

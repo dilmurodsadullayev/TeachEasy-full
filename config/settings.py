@@ -23,14 +23,21 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 #     'default': dj_database_url.parse(config('DATABASE_URL'))
 # }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': config('DBNAME'), 
+#         'USER': config('DBUSER'),
+#         'PASSWORD': config('DBPASS'),
+#         'HOST': config('DBHOST'),
+#         'PORT': config('DBPORT'),
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': config('DBNAME'), 
-        'USER': config('DBUSER'),
-        'PASSWORD': config('DBPASS'),
-        'HOST': config('DBHOST'),
-        'PORT': config('DBPORT'),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'db.sqlite3',  # Replace with your desired database file name
     }
 }
 
