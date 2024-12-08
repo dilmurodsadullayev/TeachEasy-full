@@ -152,6 +152,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
+<<<<<<< HEAD
 #STATIC_URL = "static/"
 #STATICFILES_DIRS = [BASE_DIR/'static']
 #STATIC_ROOT = BASE_DIR/'staticfiles'
@@ -160,6 +161,15 @@ USE_TZ = True
   #  'django.contrib.staticfiles.finders.AppDirectoriesFinder'
 #]
 
+=======
+# STATIC_URL = "static/"
+# STATICFILES_DIRS = [BASE_DIR/'static']
+# STATIC_ROOT = BASE_DIR/'staticfiles'
+# STATICFILES_FINDERS = [
+#     'django.contrib.staticfiles.finders.FileSystemFinder',
+#     'django.contrib.staticfiles.finders.AppDirectoriesFinder'
+# ]
+>>>>>>> 368eea182f18d2228515df034c8be51cada0f077
 
 STATIC_URL = config("STATIC_URL", default="/static/")
 STATIC_ROOT = config("STATIC_ROOT", default="/var/www/teacheasy-full/static/")
@@ -167,12 +177,15 @@ STATIC_ROOT = config("STATIC_ROOT", default="/var/www/teacheasy-full/static/")
 # Media fayllar
 MEDIA_URL = config("MEDIA_URL", default="/media/")
 MEDIA_ROOT = config("MEDIA_ROOT", default="/var/www/teacheasy-full/media/")
+<<<<<<< HEAD
 
+=======
+>>>>>>> 368eea182f18d2228515df034c8be51cada0f077
 
-import os
+# import os
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 # Default primary key field type
