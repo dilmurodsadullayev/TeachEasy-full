@@ -25,7 +25,8 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'ENGINE': 'django.db.backends.mysql',
 #         'NAME': config('DBNAME'), 
 #         'USER': config('DBUSER'),
 #         'PASSWORD': config('DBPASS'),
